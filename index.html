@@ -970,7 +970,9 @@
             
             // Время полета (зависит от уровня сложности и типа насекомого)
             const baseSpeed = 3500 + Math.random() * 1500; // 3.5-5 секунд
-            const timeModifier = Math.max(1, gameState.time / 25); // каждые 25 секунд увеличиваем скорость
+            
+            // Уменьшенная в 2 раза прогрессия ускорения со временем
+            const timeModifier = Math.max(1, gameState.time / 50); // РАНЬШЕ: / 25, СЕЙЧАС: / 50 (в 2 раза медленнее)
             const flightTime = (baseSpeed / timeModifier) / speedModifier;
             
             // Создаем анимацию с использованием requestAnimationFrame
@@ -1104,7 +1106,8 @@
             
             // Определяем количество насекомых в зависимости от времени и размера экрана
             const baseCount = 5;
-            const timeBonus = Math.floor(gameState.time / 15); // каждые 15 секунд +1 насекомое
+            // Уменьшенная прогрессия количества насекомых со временем
+            const timeBonus = Math.floor(gameState.time / 30); // РАНЬШЕ: / 15, СЕЙЧАС: / 30 (в 2 раза медленнее)
             
             // Учитываем размер экрана: на больших экранах можно больше насекомых
             const screenFactor = Math.min(width * height / (400 * 800), 2.2);
@@ -1128,12 +1131,13 @@
             
             // Планируем следующую генерацию с учетом времени и размера экрана
             const baseInterval = 800;
-            const timePenalty = Math.min(gameState.time * 6, 300);
+            // Уменьшенная прогрессия частоты появления
+            const timePenalty = Math.min(gameState.time * 3, 200); // РАНЬШЕ: * 6, СЕЙЧАС: * 3 (в 2 раза медленнее)
             
             // На маленьких экранах насекомые появляются реже
             const screenSizePenalty = width < 300 ? 200 : 0;
             
-            const nextGeneration = Math.max(baseInterval - timePenalty + screenSizePenalty, 400); // минимум 400мс
+            const nextGeneration = Math.max(baseInterval - timePenalty + screenSizePenalty, 500); // увеличено минимальное время до 500мс
             
             setTimeout(generateInsects, nextGeneration);
         }
@@ -1199,7 +1203,7 @@
             // Запуск генерации насекомых с небольшой задержкой
             setTimeout(() => {
                 generateInsects();
-            }, 200);
+            }, 300); // немного увеличена задержка
         }
 
         // Очистка всех насекомых
