@@ -107,22 +107,34 @@
             padding: 8px 12px;
             background-color: var(--bg-overlay);
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
+            gap: 8px;
             backdrop-filter: blur(10px);
             border-bottom: 1px solid var(--border-color);
             z-index: 10;
             flex-shrink: 0;
             transition: all 0.3s ease;
-            gap: 15px;
         }
         
-        .stats-row {
+        .header-row {
             display: flex;
             align-items: center;
-            gap: 15px;
-            flex: 1;
             justify-content: space-between;
+            width: 100%;
+        }
+        
+        .stats-row-top {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex: 1;
+        }
+        
+        .stats-row-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
         }
         
         .stat-group {
@@ -174,23 +186,23 @@
             display: flex;
             align-items: center;
             gap: 6px;
-            min-width: 120px; /* Уменьшено с 140px */
+            min-width: 140px;
         }
         
         .timer-bar {
             flex: 1;
-            height: 12px; /* Увеличено с 8px */
+            height: 12px;
             background-color: var(--bg-surface-light);
-            border-radius: 6px; /* Увеличено пропорционально высоте */
+            border-radius: 6px;
             overflow: hidden;
             position: relative;
-            min-width: 70px; /* Уменьшено с 80px */
+            min-width: 100px;
         }
         
         .timer-fill {
             height: 100%;
             background: linear-gradient(90deg, var(--timer-green) 0%, var(--timer-orange) 50%, var(--timer-red) 100%);
-            border-radius: 6px; /* Увеличено пропорционально высоте */
+            border-radius: 6px;
             width: 100%;
             transition: width 0.1s linear;
         }
@@ -395,6 +407,7 @@
             align-items: center;
             gap: 8px;
             margin-top: 10px;
+            margin-bottom: 15px;
         }
         
         .button {
@@ -475,6 +488,25 @@
             animation: timerPulse 0.8s infinite alternate;
         }
         
+        .menu-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .footer-text {
+            font-size: 11px;
+            color: var(--text-secondary);
+            text-decoration: underline;
+            margin-top: 15px;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+        
+        .footer-text:hover {
+            color: var(--text-accent);
+        }
+        
         @keyframes timerPulse {
             0% { box-shadow: 0 0 3px color-mix(in srgb, var(--timer-red) 40%, transparent); }
             100% { box-shadow: 0 0 8px color-mix(in srgb, var(--timer-red) 70%, transparent); }
@@ -523,29 +555,21 @@
             
             .header {
                 padding: 6px 10px;
-                gap: 10px;
+                gap: 6px;
             }
             
-            .stats-row {
-                gap: 10px;
+            .menu-controls {
+                margin-bottom: 15px;
             }
         }
         
         @media (max-width: 480px) {
             .header {
-                flex-direction: column;
-                gap: 8px;
                 padding: 6px 8px;
+                gap: 6px;
             }
             
-            .stats-row {
-                width: 100%;
-                justify-content: space-between;
-            }
-            
-            .controls-row {
-                width: 100%;
-                justify-content: center;
+            .stats-row-top {
                 gap: 10px;
             }
             
@@ -558,7 +582,11 @@
             }
             
             .timer-container {
-                min-width: 100px; /* Уменьшено для мобильных */
+                min-width: 120px;
+            }
+            
+            .timer-bar {
+                min-width: 80px;
             }
             
             .title {
@@ -583,28 +611,44 @@
             .insect {
                 font-size: 32px;
             }
-        }
-        
-        @media (max-width: 380px) {
-            .stats-row {
-                flex-wrap: wrap;
-                justify-content: center;
+            
+            .menu-controls {
                 gap: 8px;
             }
             
-            .stat-group {
-                flex: 1;
-                min-width: 120px;
-                justify-content: center;
+            .controls-row {
+                gap: 6px;
+            }
+            
+            .control-button {
+                width: 28px;
+                height: 28px;
+                font-size: 14px;
+            }
+        }
+        
+        @media (max-width: 380px) {
+            .stats-row-top {
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            
+            .stats-row-bottom {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 8px;
             }
             
             .timer-container {
-                min-width: 100%;
+                width: 100%;
+            }
+            
+            .health-container {
                 justify-content: center;
             }
             
-            .timer-bar {
-                max-width: 120px;
+            .controls-row {
+                justify-content: center;
             }
         }
     </style>
@@ -628,30 +672,12 @@
                     </ul>
                 </div>
                 
-                <div class="emoji-info">
-                    <div class="emoji-item">
-                        <div>🦟</div>
-                        <div class="emoji-desc">Комары<br>+1 очко<br>Сбрасывает таймер</div>
+                <div class="menu-controls">
+                    <div class="control-button" id="menuSoundControl" title="Звуки эффектов">
+                        🔊
                     </div>
-                    <div class="emoji-item">
-                        <div>🪳</div>
-                        <div class="emoji-desc">Тараканы<br>+1 очко<br>Сбрасывает таймер</div>
-                    </div>
-                    <div class="emoji-item">
-                        <div>🪰</div>
-                        <div class="emoji-desc">Мухи<br>+1 очко<br>Сбрасывает таймер</div>
-                    </div>
-                    <div class="emoji-item">
-                        <div>🐝</div>
-                        <div class="emoji-desc">Пчёлы<br>-1 здоровье</div>
-                    </div>
-                    <div class="emoji-item">
-                        <div>🐞</div>
-                        <div class="emoji-desc">Божья коровка<br>+1 здоровье<br>Сбрасывает таймер</div>
-                    </div>
-                    <div class="emoji-item">
-                        <div>🪲</div>
-                        <div class="emoji-desc">Жуки<br>-1 здоровье</div>
+                    <div class="control-button" id="menuThemeControl" title="Сменить тему">
+                        🌓
                     </div>
                 </div>
                 
@@ -659,6 +685,8 @@
                     <button id="startButton" class="button">НАЧАТЬ ИГРУ</button>
                     <button id="showStatsButton" class="button">СТАТИСТИКА</button>
                 </div>
+                
+                <a href="https://t.me/kabinagames" target="_blank" class="footer-text">by Kabina Inc.</a>
             </div>
             
             <!-- Экран статистики -->
@@ -682,13 +710,24 @@
                         <span id="totalGames" class="score-value">0</span>
                     </div>
                 </div>
+                
+                <div class="menu-controls">
+                    <div class="control-button" id="statsSoundControl" title="Звуки эффектов">
+                        🔊
+                    </div>
+                    <div class="control-button" id="statsThemeControl" title="Сменить тему">
+                        🌓
+                    </div>
+                </div>
+                
                 <button id="backToMenuButton" class="button">НАЗАД В МЕНЮ</button>
             </div>
             
             <!-- Игровой экран -->
             <div id="gameScreen" class="screen hidden">
                 <div class="header">
-                    <div class="stats-row">
+                    <!-- Первая строка: очки, время, кнопки управления -->
+                    <div class="header-row stats-row-top">
                         <div class="stat-group">
                             <div class="stat-item">Очки: <span id="score" class="stat-value">0</span></div>
                         </div>
@@ -697,6 +736,18 @@
                             <div class="stat-item">Время: <span id="time" class="stat-value">0</span> сек</div>
                         </div>
                         
+                        <div class="controls-row">
+                            <div class="control-button" id="soundControl" title="Звуки эффектов">
+                                🔊
+                            </div>
+                            <div class="control-button" id="themeControl" title="Сменить тему">
+                                🌓
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Вторая строка: таймер и здоровье -->
+                    <div class="header-row stats-row-bottom">
                         <div class="timer-container">
                             <div class="stat-item">Таймер:</div>
                             <div class="timer-bar">
@@ -709,15 +760,6 @@
                             <div class="hearts" id="heartsContainer">
                                 <!-- Сердечки будут добавлены через JS -->
                             </div>
-                        </div>
-                    </div>
-                    
-                    <div class="controls-row">
-                        <div class="control-button" id="soundControl" title="Звуки эффектов">
-                            🔊
-                        </div>
-                        <div class="control-button" id="themeControl" title="Сменить тему">
-                            🌓
                         </div>
                     </div>
                 </div>
@@ -758,6 +800,15 @@
                     <div class="stats-item">
                         <span>Жуков встречено:</span>
                         <span id="endBeetles" class="score-value">0</span>
+                    </div>
+                </div>
+                
+                <div class="menu-controls">
+                    <div class="control-button" id="gameOverSoundControl" title="Звуки эффектов">
+                        🔊
+                    </div>
+                    <div class="control-button" id="gameOverThemeControl" title="Сменить тему">
+                        🌓
                     </div>
                 </div>
                 
@@ -828,7 +879,7 @@
             for (let i = 0; i < gameState.maxHealth; i++) {
                 const heart = document.createElement('div');
                 heart.className = i < gameState.health ? 'heart' : 'heart empty';
-                heart.textContent = i < gameState.health ? '❤️' : '🖤'; // Используем разные эмодзи
+                heart.textContent = i < gameState.health ? '❤️' : '🖤';
                 heartsContainer.appendChild(heart);
             }
         }
@@ -1007,40 +1058,75 @@
             }
         }
         
+        // Обновление всех кнопок звука
+        function updateAllSoundButtons() {
+            const soundButtons = [
+                document.getElementById('soundControl'),
+                document.getElementById('menuSoundControl'),
+                document.getElementById('statsSoundControl'),
+                document.getElementById('gameOverSoundControl')
+            ];
+            
+            soundButtons.forEach(button => {
+                if (button) {
+                    if (gameState.soundEnabled) {
+                        button.textContent = '🔊';
+                        button.classList.remove('muted');
+                        button.title = 'Выключить звуки эффектов';
+                    } else {
+                        button.textContent = '🔇';
+                        button.classList.add('muted');
+                        button.title = 'Включить звуки эффектов';
+                    }
+                }
+            });
+        }
+        
+        // Обновление всех кнопок темы
+        function updateAllThemeButtons() {
+            const themeButtons = [
+                document.getElementById('themeControl'),
+                document.getElementById('menuThemeControl'),
+                document.getElementById('statsThemeControl'),
+                document.getElementById('gameOverThemeControl')
+            ];
+            
+            const body = document.body;
+            
+            themeButtons.forEach(button => {
+                if (button) {
+                    if (gameState.theme === 'auto') {
+                        button.textContent = '🌓';
+                        button.title = 'Авто тема';
+                    } else if (gameState.theme === 'light') {
+                        button.textContent = '🌕';
+                        button.title = 'Темная тема';
+                    } else {
+                        button.textContent = '🌑';
+                        button.title = 'Светлая тема';
+                    }
+                }
+            });
+        }
+        
         // Переключение звуков эффектов
         function toggleSound() {
             gameState.soundEnabled = !gameState.soundEnabled;
-            const soundControl = document.getElementById('soundControl');
-            
-            if (gameState.soundEnabled) {
-                soundControl.textContent = '🔊';
-                soundControl.classList.remove('muted');
-                soundControl.title = 'Выключить звуки эффектов';
-            } else {
-                soundControl.textContent = '🔇';
-                soundControl.classList.add('muted');
-                soundControl.title = 'Включить звуки эффектов';
-            }
-            
             localStorage.setItem('komarSoundEnabled', gameState.soundEnabled);
+            updateAllSoundButtons();
         }
         
         // Переключение темы
         function toggleTheme() {
-            const themeControl = document.getElementById('themeControl');
             const body = document.body;
             
             if (gameState.theme === 'auto') {
                 // Переключаемся на светлую тему
                 body.classList.add('light-theme');
-                themeControl.textContent = '🌕'; // Солнце для светлой темы
-                themeControl.title = 'Темная тема';
                 gameState.theme = 'light';
             } else if (gameState.theme === 'light') {
                 // Переключаемся на темную тему
                 body.classList.remove('light-theme');
-                themeControl.textContent = '🌑'; // Луна для темной темы
-                themeControl.title = 'Светлая тема';
                 gameState.theme = 'dark';
             } else {
                 // Переключаемся на авто тему
@@ -1050,12 +1136,11 @@
                 } else {
                     body.classList.remove('light-theme');
                 }
-                themeControl.textContent = '🌓';
-                themeControl.title = 'Авто тема';
                 gameState.theme = 'auto';
             }
             
             localStorage.setItem('komarTheme', gameState.theme);
+            updateAllThemeButtons();
         }
         
         // Загрузка статистики из localStorage
@@ -1464,46 +1549,72 @@
             clearAllInsects();
         }
 
-        // Обработчики кнопок
-        document.getElementById('startButton').addEventListener('click', () => {
-            playSound(window.playClickSound);
-            startGame();
-        });
-        
-        document.getElementById('restartButton').addEventListener('click', () => {
-            playSound(window.playClickSound);
-            startGame();
-        });
-        
-        document.getElementById('showStatsButton').addEventListener('click', () => {
-            playSound(window.playClickSound);
-            document.getElementById('startScreen').classList.add('hidden');
-            document.getElementById('statsScreen').classList.remove('hidden');
-        });
-        
-        document.getElementById('backToMenuButton').addEventListener('click', () => {
-            playSound(window.playClickSound);
-            document.getElementById('statsScreen').classList.add('hidden');
-            document.getElementById('startScreen').classList.remove('hidden');
-        });
-        
-        document.getElementById('menuButton').addEventListener('click', () => {
-            playSound(window.playClickSound);
-            document.getElementById('gameOverScreen').classList.add('hidden');
-            document.getElementById('startScreen').classList.remove('hidden');
-            clearAllInsects();
-        });
-        
-        // Обработчики кнопок управления
-        document.getElementById('soundControl').addEventListener('click', () => {
-            playSound(window.playClickSound);
-            toggleSound();
-        });
-        
-        document.getElementById('themeControl').addEventListener('click', () => {
-            playSound(window.playClickSound);
-            toggleTheme();
-        });
+        // Инициализация обработчиков событий
+        function initEventListeners() {
+            // Обработчики кнопок
+            document.getElementById('startButton').addEventListener('click', () => {
+                playSound(window.playClickSound);
+                startGame();
+            });
+            
+            document.getElementById('restartButton').addEventListener('click', () => {
+                playSound(window.playClickSound);
+                startGame();
+            });
+            
+            document.getElementById('showStatsButton').addEventListener('click', () => {
+                playSound(window.playClickSound);
+                document.getElementById('startScreen').classList.add('hidden');
+                document.getElementById('statsScreen').classList.remove('hidden');
+            });
+            
+            document.getElementById('backToMenuButton').addEventListener('click', () => {
+                playSound(window.playClickSound);
+                document.getElementById('statsScreen').classList.add('hidden');
+                document.getElementById('startScreen').classList.remove('hidden');
+            });
+            
+            document.getElementById('menuButton').addEventListener('click', () => {
+                playSound(window.playClickSound);
+                document.getElementById('gameOverScreen').classList.add('hidden');
+                document.getElementById('startScreen').classList.remove('hidden');
+                clearAllInsects();
+            });
+            
+            // Обработчики кнопок управления звуком
+            const soundButtons = [
+                document.getElementById('soundControl'),
+                document.getElementById('menuSoundControl'),
+                document.getElementById('statsSoundControl'),
+                document.getElementById('gameOverSoundControl')
+            ];
+            
+            soundButtons.forEach(button => {
+                if (button) {
+                    button.addEventListener('click', () => {
+                        playSound(window.playClickSound);
+                        toggleSound();
+                    });
+                }
+            });
+            
+            // Обработчики кнопок управления темой
+            const themeButtons = [
+                document.getElementById('themeControl'),
+                document.getElementById('menuThemeControl'),
+                document.getElementById('statsThemeControl'),
+                document.getElementById('gameOverThemeControl')
+            ];
+            
+            themeButtons.forEach(button => {
+                if (button) {
+                    button.addEventListener('click', () => {
+                        playSound(window.playClickSound);
+                        toggleTheme();
+                    });
+                }
+            });
+        }
 
         // Обработка изменения размера экрана
         let resizeTimeout;
@@ -1523,6 +1634,7 @@
             loadStats();
             getGameAreaSize();
             initSounds();
+            initEventListeners();
             
             // Загрузка настроек
             const savedSound = localStorage.getItem('komarSoundEnabled');
@@ -1533,32 +1645,19 @@
             
             // Применение темы
             const body = document.body;
-            const themeControl = document.getElementById('themeControl');
             
             if (gameState.theme === 'auto') {
                 const systemTheme = getSystemTheme();
                 if (systemTheme === 'light') {
                     body.classList.add('light-theme');
                 }
-                themeControl.textContent = '🌓';
-                themeControl.title = 'Авто тема';
             } else if (gameState.theme === 'light') {
                 body.classList.add('light-theme');
-                themeControl.textContent = '🌕'; // Солнце для светлой темы
-                themeControl.title = 'Темная тема';
-            } else {
-                themeControl.textContent = '🌑'; // Луна для темной темы
-                themeControl.title = 'Светлая тема';
             }
             
             // Обновление кнопок
-            const soundControl = document.getElementById('soundControl');
-            
-            if (!gameState.soundEnabled) {
-                soundControl.textContent = '🔇';
-                soundControl.classList.add('muted');
-                soundControl.title = 'Включить звуки эффектов';
-            }
+            updateAllSoundButtons();
+            updateAllThemeButtons();
             
             if ('ontouchstart' in window) {
                 document.body.style.cursor = 'pointer';
