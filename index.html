@@ -239,9 +239,18 @@
             animation: mosquitoFloat 2s infinite alternate ease-in-out;
         }
         
+        .insect.ladybug {
+            animation: ladybugFloat 3s infinite alternate ease-in-out;
+        }
+        
         @keyframes mosquitoFloat {
             0% { transform: translate(-50%, -50%) scale(1); }
             100% { transform: translate(-50%, -50%) scale(1.04); }
+        }
+        
+        @keyframes ladybugFloat {
+            0% { transform: translate(-50%, -50%) scale(1); }
+            100% { transform: translate(-50%, -50%) scale(1.06); }
         }
         
         .hit-effect {
@@ -582,10 +591,9 @@
                     <div class="rules-title">Правила:</div>
                     <ul class="rules-list">
                         <li>Убивайте комаров 🦟, тараканов 🪳 и мух 🪰 чтобы получить очки</li>
-                        <li>Избегайте пчёл 🐝 - они отнимают здоровье</li>
-                        <li>Собирайте божьих коровок 🐞 для восстановления здоровья</li>
-                        <li>Жуки 🪲 просто отвлекают и ничего не дают</li>
-                        <li>У вас есть 10 секунд чтобы убить комара, муху или таракана!</li>
+                        <li>Избегайте пчёл 🐝 и жуков 🪲 - они отнимают здоровье</li>
+                        <li>Собирайте божьих коровок 🐞 для восстановления здоровья и сброса таймера</li>
+                        <li>У вас есть 10 секунд чтобы убить комара, муху, таракана или божью коровку!</li>
                         <li>Каждый убитый сбрасывает таймер на 10 секунд</li>
                         <li>Если таймер достигнет нуля - игра окончена</li>
                     </ul>
@@ -601,20 +609,20 @@
                         <div class="emoji-desc">Тараканы<br>+1 очко<br>Сбрасывает таймер</div>
                     </div>
                     <div class="emoji-item">
+                        <div>🪰</div>
+                        <div class="emoji-desc">Мухи<br>+1 очко<br>Сбрасывает таймер</div>
+                    </div>
+                    <div class="emoji-item">
                         <div>🐝</div>
                         <div class="emoji-desc">Пчёлы<br>-1 здоровье</div>
                     </div>
                     <div class="emoji-item">
                         <div>🐞</div>
-                        <div class="emoji-desc">Божья коровка<br>+1 здоровье</div>
-                    </div>
-                    <div class="emoji-item">
-                        <div>🪰</div>
-                        <div class="emoji-desc">Мухи<br>+1 очко<br>Сбрасывает таймер</div>
+                        <div class="emoji-desc">Божья коровка<br>+1 здоровье<br>Сбрасывает таймер</div>
                     </div>
                     <div class="emoji-item">
                         <div>🪲</div>
-                        <div class="emoji-desc">Жуки<br>без последствий</div>
+                        <div class="emoji-desc">Жуки<br>-1 здоровье</div>
                     </div>
                 </div>
                 
@@ -697,15 +705,15 @@
                         <span id="endFlies" class="score-value">0</span>
                     </div>
                     <div class="stats-item">
-                        <span>Пчёл встречено:</span>
-                        <span id="endBees" class="score-value">0</span>
-                    </div>
-                    <div class="stats-item">
                         <span>Божьих коровок собрано:</span>
                         <span id="endLadybugs" class="score-value">0</span>
                     </div>
                     <div class="stats-item">
-                        <span>Жуков увидели:</span>
+                        <span>Пчёл встречено:</span>
+                        <span id="endBees" class="score-value">0</span>
+                    </div>
+                    <div class="stats-item">
+                        <span>Жуков встречено:</span>
                         <span id="endBeetles" class="score-value">0</span>
                     </div>
                 </div>
@@ -840,7 +848,7 @@
                     
                     if (gameState.timerValue <= 0) {
                         gameState.timerValue = 0;
-                        endGame("Время вышло! Не успели убить комара, муху или таракана.");
+                        endGame("Время вышло! Не успели убить комара, муху, таракана или божью коровку.");
                     }
                     
                     updateGameDisplay();
@@ -882,9 +890,11 @@
             const insectSize = 38 * sizeVariation; // Базовый размер 38px
             insect.style.fontSize = `${insectSize}px`;
             
-            // Добавляем класс для комаров для анимации
+            // Добавляем класс для анимации
             if (type === '🦟') {
                 insect.classList.add('mosquito');
+            } else if (type === '🐞') {
+                insect.classList.add('ladybug');
             }
             
             // Начальная позиция (случайный край экрана)
@@ -1064,6 +1074,7 @@
                     break;
                     
                 case '🐝': // Пчелы
+                case '🪲': // Жуки
                     gameState.health--;
                     updateGameDisplay();
                     if (gameState.health <= 0) {
@@ -1074,12 +1085,9 @@
                 case '🐞': // Божьи коровки
                     if (gameState.health < gameState.maxHealth) {
                         gameState.health++;
-                        updateGameDisplay();
                     }
-                    break;
-                    
-                case '🪲': // Жуки
-                    // Ничего не делаем, просто отвлекающий элемент
+                    resetTimer(); // Сбрасываем таймер
+                    updateGameDisplay();
                     break;
             }
         }
@@ -1095,32 +1103,32 @@
             if (width < 100 || height < 100) return;
             
             // Определяем количество насекомых в зависимости от времени и размера экрана
-            const baseCount = 5; // Увеличено базовое количество
+            const baseCount = 5;
             const timeBonus = Math.floor(gameState.time / 15); // каждые 15 секунд +1 насекомое
             
             // Учитываем размер экрана: на больших экранах можно больше насекомых
-            const screenFactor = Math.min(width * height / (400 * 800), 2.2); // Увеличено до 2.2
-            const maxInsects = Math.min(baseCount + timeBonus, Math.floor(20 * screenFactor)); // увеличено максимум до 20
+            const screenFactor = Math.min(width * height / (400 * 800), 2.2);
+            const maxInsects = Math.min(baseCount + timeBonus, Math.floor(20 * screenFactor)); // максимум до 20
             
             // Если насекомых меньше максимального количества, добавляем новые
             if (gameState.insectsCount < maxInsects) {
                 // Вероятности появления разных насекомых
-                // Больше полезных насекомых (дают очки) чтобы было легче сбрасывать таймер
+                // С учетом новой механики: 4 типа сбрасывают таймер, 2 типа отнимают здоровье
                 const insectTypes = [
-                    '🦟', '🦟', '🦟', '🦟', '🦟', // Комары (5)
-                    '🪳', '🪳', '🪳', '🪳', // Тараканы (4)
-                    '🪰', '🪰', '🪰', '🪰', // Мухи (4)
-                    '🐝', '🐝', '🐝', // Пчелы (3)
-                    '🐞', '🐞', // Божьи коровки (2)
-                    '🪲', '🪲', '🪲' // Жуки (3)
+                    '🦟', '🦟', '🦟', '🦟', '🦟', // Комары (5) - очки + сброс таймера
+                    '🪳', '🪳', '🪳', '🪳', // Тараканы (4) - очки + сброс таймера
+                    '🪰', '🪰', '🪰', '🪰', // Мухи (4) - очки + сброс таймера
+                    '🐝', '🐝', '🐝', // Пчелы (3) - минус здоровье
+                    '🐞', '🐞', '🐞', // Божьи коровки (3) - здоровье + сброс таймера
+                    '🪲', '🪲', '🪲' // Жуки (3) - минус здоровье
                 ];
                 const randomType = insectTypes[Math.floor(Math.random() * insectTypes.length)];
                 createInsect(randomType);
             }
             
             // Планируем следующую генерацию с учетом времени и размера экрана
-            const baseInterval = 800; // Уменьшено время между появлениями
-            const timePenalty = Math.min(gameState.time * 6, 300); // Увеличена частота появления
+            const baseInterval = 800;
+            const timePenalty = Math.min(gameState.time * 6, 300);
             
             // На маленьких экранах насекомые появляются реже
             const screenSizePenalty = width < 300 ? 200 : 0;
@@ -1191,7 +1199,7 @@
             // Запуск генерации насекомых с небольшой задержкой
             setTimeout(() => {
                 generateInsects();
-            }, 200); // Уменьшена задержка
+            }, 200);
         }
 
         // Очистка всех насекомых
@@ -1237,8 +1245,8 @@
             document.getElementById('endMosquitoes').textContent = gameState.stats.mosquitoes;
             document.getElementById('endCockroaches').textContent = gameState.stats.cockroaches;
             document.getElementById('endFlies').textContent = gameState.stats.flies;
-            document.getElementById('endBees').textContent = gameState.stats.bees;
             document.getElementById('endLadybugs').textContent = gameState.stats.ladybugs;
+            document.getElementById('endBees').textContent = gameState.stats.bees;
             document.getElementById('endBeetles').textContent = gameState.stats.beetles;
             
             // Показ экрана окончания игры
