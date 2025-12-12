@@ -33,16 +33,11 @@
             max-width: 800px;
             max-height: 1200px;
             position: relative;
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
             overflow: hidden;
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
         }
         
         @media (max-width: 768px) {
             .game-wrapper {
-                border: none;
-                border-radius: 0;
                 max-width: 100%;
                 max-height: 100%;
             }
@@ -57,8 +52,8 @@
         }
         
         .header {
-            padding: 12px 15px;
-            background-color: rgba(0, 0, 0, 0.7);
+            padding: 8px 12px;
+            background-color: rgba(0, 0, 0, 0.85);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -71,42 +66,53 @@
         .stats {
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 3px;
+            min-width: 140px;
         }
         
         .stat-item {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .stat-value {
+            font-weight: bold;
+            color: #ff9800;
+            font-size: 14px;
         }
         
         .health-container {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 5px;
         }
         
         .health-bar {
-            width: 100px;
-            height: 10px;
+            width: 80px;
+            height: 8px;
             background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 5px;
+            border-radius: 4px;
             overflow: hidden;
         }
         
         .health-fill {
             height: 100%;
             background-color: #00c853;
-            border-radius: 5px;
+            border-radius: 4px;
             transition: width 0.3s ease;
         }
         
         .timer-container {
-            margin-top: 8px;
-            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
         
         .timer-bar {
-            width: 100%;
+            width: 80px;
             height: 8px;
             background-color: rgba(255, 255, 255, 0.1);
             border-radius: 4px;
@@ -119,7 +125,7 @@
             background: linear-gradient(90deg, #4CAF50 0%, #FF9800 50%, #F44336 100%);
             border-radius: 4px;
             width: 100%;
-            transition: width 1s linear;
+            transition: width 0.1s linear;
         }
         
         .timer-text {
@@ -127,10 +133,10 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 11px;
+            font-size: 10px;
             font-weight: bold;
             color: white;
-            text-shadow: 0 0 3px rgba(0, 0, 0, 0.8);
+            text-shadow: 0 0 2px rgba(0, 0, 0, 0.8);
             z-index: 2;
         }
         
@@ -138,7 +144,7 @@
             flex: 1;
             position: relative;
             overflow: hidden;
-            background-color: rgba(0, 0, 0, 0.2);
+            background-color: rgba(0, 0, 0, 0.15);
             width: 100%;
             height: 100%;
         }
@@ -151,12 +157,12 @@
             height: 100%;
             pointer-events: none;
             z-index: 1;
-            box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.05);
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
         }
         
         .insect {
             position: absolute;
-            font-size: 48px; /* Увеличенный размер насекомых */
+            font-size: 48px;
             cursor: pointer;
             transition: transform 0.1s;
             z-index: 2;
@@ -204,99 +210,99 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            background-color: rgba(0, 0, 0, 0.9);
+            background-color: rgba(0, 0, 0, 0.95);
             z-index: 20;
-            padding: 20px;
+            padding: 15px;
             text-align: center;
             overflow-y: auto;
         }
         
         .title {
-            font-size: 42px;
+            font-size: 36px;
             font-weight: bold;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             color: #ff9800;
-            text-shadow: 0 0 10px rgba(255, 152, 0, 0.5);
-        }
-        
-        .subtitle {
-            font-size: 18px;
-            margin-bottom: 30px;
-            color: #b0b0b0;
-            max-width: 500px;
-            line-height: 1.4;
-            padding: 0 10px;
+            text-shadow: 0 0 8px rgba(255, 152, 0, 0.5);
         }
         
         .game-rules {
-            background-color: rgba(255, 152, 0, 0.1);
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 25px;
-            max-width: 500px;
-            border: 1px solid rgba(255, 152, 0, 0.2);
+            background-color: rgba(255, 152, 0, 0.08);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 20px;
+            max-width: 420px;
+            border: 1px solid rgba(255, 152, 0, 0.15);
         }
         
         .rules-title {
-            font-size: 20px;
+            font-size: 16px;
             color: #ff9800;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
         
         .rules-list {
             text-align: left;
-            padding-left: 20px;
+            padding-left: 15px;
         }
         
         .rules-list li {
-            margin-bottom: 8px;
-            font-size: 15px;
+            margin-bottom: 6px;
+            font-size: 13px;
             color: #ddd;
+            line-height: 1.3;
         }
         
         .emoji-info {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 15px;
-            margin-bottom: 30px;
-            max-width: 500px;
-            padding: 0 10px;
+            gap: 12px;
+            margin-bottom: 20px;
+            max-width: 420px;
+            padding: 0 5px;
         }
         
         .emoji-item {
             display: flex;
             flex-direction: column;
             align-items: center;
-            font-size: 32px;
-            width: 80px;
+            font-size: 28px;
+            width: 70px;
         }
         
         .emoji-desc {
-            font-size: 13px;
-            margin-top: 8px;
+            font-size: 11px;
+            margin-top: 5px;
             color: #ccc;
             text-align: center;
+            line-height: 1.2;
+        }
+        
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            margin-top: 5px;
         }
         
         .button {
             background-color: #ff9800;
             color: #000;
             border: none;
-            border-radius: 50px;
-            padding: 15px 30px;
-            font-size: 18px;
+            border-radius: 25px;
+            padding: 12px 24px;
+            font-size: 15px;
             font-weight: bold;
             cursor: pointer;
-            margin: 8px;
             transition: all 0.2s;
-            box-shadow: 0 5px 15px rgba(255, 152, 0, 0.3);
-            min-width: 200px;
+            box-shadow: 0 4px 10px rgba(255, 152, 0, 0.2);
+            min-width: 180px;
         }
         
         .button:hover {
             background-color: #ffb74d;
-            transform: translateY(-3px);
+            transform: translateY(-2px);
         }
         
         .button:active {
@@ -304,28 +310,28 @@
         }
         
         .stats-table {
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 20px;
-            margin: 15px;
+            background-color: rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px;
             width: 90%;
-            max-width: 500px;
+            max-width: 400px;
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
         .stats-title {
-            font-size: 24px;
-            margin-bottom: 15px;
+            font-size: 20px;
+            margin-bottom: 12px;
             color: #ff9800;
         }
         
         .stats-item {
             display: flex;
             justify-content: space-between;
-            padding: 10px 0;
+            padding: 8px 0;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            font-size: 16px;
+            font-size: 14px;
         }
         
         .stats-item:last-child {
@@ -339,79 +345,56 @@
         
         .game-over {
             color: #ff5252;
-            font-size: 36px;
-            margin-bottom: 15px;
+            font-size: 30px;
+            margin-bottom: 12px;
         }
         
         .final-score {
-            font-size: 24px;
-            margin-bottom: 20px;
+            font-size: 20px;
+            margin-bottom: 15px;
         }
         
         .hidden {
             display: none !important;
         }
         
-        .screen-info {
-            font-size: 14px;
-            color: #888;
-            margin-top: 20px;
-            text-align: center;
-            padding: 0 10px;
-        }
-        
         .urgent-timer {
-            animation: timerPulse 1s infinite alternate;
+            animation: timerPulse 0.8s infinite alternate;
         }
         
         @keyframes timerPulse {
-            0% { box-shadow: 0 0 5px rgba(244, 67, 54, 0.5); }
-            100% { box-shadow: 0 0 15px rgba(244, 67, 54, 0.8); }
+            0% { box-shadow: 0 0 3px rgba(244, 67, 54, 0.4); }
+            100% { box-shadow: 0 0 8px rgba(244, 67, 54, 0.7); }
         }
         
         @media (max-height: 600px) {
             .title {
-                font-size: 32px;
+                font-size: 28px;
+                margin-bottom: 10px;
+            }
+            
+            .game-rules {
+                padding: 10px;
                 margin-bottom: 15px;
+                max-width: 380px;
             }
             
-            .subtitle {
-                font-size: 16px;
-                margin-bottom: 20px;
-            }
-            
-            .emoji-info {
-                margin-bottom: 20px;
-                gap: 10px;
-            }
-            
-            .emoji-item {
-                width: 70px;
-                font-size: 28px;
-            }
-            
-            .button {
-                padding: 12px 25px;
-                font-size: 16px;
-                min-width: 180px;
-            }
-            
-            .insect {
-                font-size: 42px;
-            }
-        }
-        
-        @media (max-width: 380px) {
-            .title {
-                font-size: 28px;
-            }
-            
-            .subtitle {
+            .rules-title {
                 font-size: 14px;
             }
             
+            .rules-list li {
+                font-size: 12px;
+                margin-bottom: 4px;
+            }
+            
+            .emoji-info {
+                margin-bottom: 15px;
+                gap: 8px;
+            }
+            
             .emoji-item {
-                width: 65px;
+                width: 60px;
                 font-size: 24px;
             }
             
@@ -421,16 +404,45 @@
                 min-width: 160px;
             }
             
+            .insect {
+                font-size: 42px;
+            }
+        }
+        
+        @media (max-width: 380px) {
+            .title {
+                font-size: 24px;
+            }
+            
+            .game-rules {
+                max-width: 340px;
+            }
+            
+            .emoji-item {
+                width: 55px;
+                font-size: 22px;
+            }
+            
+            .button {
+                padding: 8px 16px;
+                font-size: 13px;
+                min-width: 140px;
+            }
+            
             .header {
-                padding: 8px 10px;
+                padding: 6px 8px;
             }
             
             .stat-item {
+                font-size: 11px;
+            }
+            
+            .stat-value {
                 font-size: 12px;
             }
             
-            .health-bar {
-                width: 80px;
+            .health-bar, .timer-bar {
+                width: 70px;
             }
             
             .insect {
@@ -440,30 +452,35 @@
         
         @media (orientation: landscape) and (max-height: 500px) {
             .title {
-                font-size: 28px;
-                margin-bottom: 10px;
+                font-size: 24px;
+                margin-bottom: 8px;
             }
             
-            .subtitle {
-                font-size: 14px;
-                margin-bottom: 15px;
+            .game-rules {
+                padding: 8px;
+                margin-bottom: 10px;
+                max-width: 90%;
+            }
+            
+            .rules-list li {
+                font-size: 11px;
             }
             
             .emoji-info {
-                margin-bottom: 15px;
-                gap: 8px;
+                margin-bottom: 10px;
+                gap: 6px;
             }
             
             .button {
-                padding: 8px 16px;
-                font-size: 14px;
-                min-width: 140px;
-                margin: 5px;
+                padding: 6px 12px;
+                font-size: 12px;
+                min-width: 120px;
+                margin: 2px;
             }
             
             .stats-table {
                 padding: 10px;
-                margin: 10px;
+                margin: 8px;
             }
             
             .insect {
@@ -478,10 +495,9 @@
             <!-- Экран начала игры -->
             <div id="startScreen" class="screen">
                 <h1 class="title">КОМАР</h1>
-                <p class="subtitle">Уничтожайте комаров 🦟, избегайте пчёл 🐝, собирайте божьих коровок 🐞 для здоровья. Мухи 🪰 - просто отвлекают.</p>
                 
                 <div class="game-rules">
-                    <div class="rules-title">Правила игры:</div>
+                    <div class="rules-title">Правила:</div>
                     <ul class="rules-list">
                         <li>Убивайте комаров 🦟 чтобы получить очки</li>
                         <li>Избегайте пчёл 🐝 - они отнимают здоровье</li>
@@ -512,9 +528,10 @@
                     </div>
                 </div>
                 
-                <button id="startButton" class="button">НАЧАТЬ ИГРУ</button>
-                <button id="showStatsButton" class="button">СТАТИСТИКА</button>
-                <div class="screen-info">Игра адаптирована под все размеры экранов</div>
+                <div class="button-container">
+                    <button id="startButton" class="button">НАЧАТЬ ИГРУ</button>
+                    <button id="showStatsButton" class="button">СТАТИСТИКА</button>
+                </div>
             </div>
             
             <!-- Экран статистики -->
@@ -545,9 +562,10 @@
             <div id="gameScreen" class="screen hidden">
                 <div class="header">
                     <div class="stats">
-                        <div class="stat-item">Убито комаров: <span id="score">0</span></div>
-                        <div class="stat-item">Время игры: <span id="time">0</span> сек</div>
+                        <div class="stat-item">Комары: <span id="score" class="stat-value">0</span></div>
+                        <div class="stat-item">Время: <span id="time" class="stat-value">0</span> сек</div>
                         <div class="timer-container">
+                            <div class="stat-item">Таймер:</div>
                             <div class="timer-bar">
                                 <div id="timerFill" class="timer-fill" style="width: 100%"></div>
                                 <div id="timerText" class="timer-text">10</div>
@@ -594,8 +612,10 @@
                     </div>
                 </div>
                 
-                <button id="restartButton" class="button">ИГРАТЬ СНОВА</button>
-                <button id="menuButton" class="button">ГЛАВНОЕ МЕНЮ</button>
+                <div class="button-container">
+                    <button id="restartButton" class="button">ИГРАТЬ СНОВА</button>
+                    <button id="menuButton" class="button">ГЛАВНОЕ МЕНЮ</button>
+                </div>
             </div>
         </div>
     </div>
@@ -676,13 +696,13 @@
             // Изменение цвета таймера в зависимости от оставшегося времени
             if (gameState.timerValue <= 3) {
                 timerFill.style.background = 'linear-gradient(90deg, #FF9800 0%, #F44336 100%)';
-                timerBar.classList.add('urgent-timer');
+                if (timerBar) timerBar.classList.add('urgent-timer');
             } else if (gameState.timerValue <= 6) {
                 timerFill.style.background = 'linear-gradient(90deg, #4CAF50 0%, #FF9800 100%)';
-                timerBar.classList.remove('urgent-timer');
+                if (timerBar) timerBar.classList.remove('urgent-timer');
             } else {
                 timerFill.style.background = 'linear-gradient(90deg, #4CAF50 0%, #4CAF50 100%)';
-                timerBar.classList.remove('urgent-timer');
+                if (timerBar) timerBar.classList.remove('urgent-timer');
             }
         }
 
