@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>КОМАР - Игра</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            touch-action: manipulation;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .game-wrapper {
+            width: 100%;
+            height: 100%;
+            max-width: 800px;
+            max-height: 1200px;
+            position: relative;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        @media (max-width: 768px) {
+            .game-wrapper {
+                border: none;
+                border-radius: 0;
+                max-width: 100%;
+                max-height: 100%;
+            }
+        }
+        
+        .game-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .header {
+            padding: 12px 15px;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 10;
+            flex-shrink: 0;
+        }
+        
+        .stats {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        
+        .stat-item {
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .health-container {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .health-bar {
+            width: 100px;
+            height: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .health-fill {
+            height: 100%;
+            background-color: #00c853;
+            border-radius: 5px;
+            transition: width 0.3s ease;
+        }
+        
+        .timer-container {
+            margin-top: 8px;
+            width: 100%;
+        }
+        
+        .timer-bar {
+            width: 100%;
+            height: 8px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .timer-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50 0%, #FF9800 50%, #F44336 100%);
+            border-radius: 4px;
+            width: 100%;
+            transition: width 1s linear;
+        }
+        
+        .timer-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 11px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 0 0 3px rgba(0, 0, 0, 0.8);
+            z-index: 2;
+        }
+        
+        .game-area {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+            background-color: rgba(0, 0, 0, 0.2);
+            width: 100%;
+            height: 100%;
+        }
+        
+        .game-area-border {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.05);
+        }
+        
+        .insect {
+            position: absolute;
+            font-size: 48px; /* Увеличенный размер насекомых */
+            cursor: pointer;
+            transition: transform 0.1s;
+            z-index: 2;
+            text-shadow: 0 0 12px rgba(0, 0, 0, 0.8);
+            pointer-events: auto;
+            transform: translate(-50%, -50%);
+            will-change: transform;
+            filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.5));
+        }
+        
+        .insect:hover {
+            transform: translate(-50%, -50%) scale(1.15);
+        }
+        
+        .insect.mosquito {
+            animation: mosquitoFloat 2s infinite alternate ease-in-out;
+        }
+        
+        @keyframes mosquitoFloat {
+            0% { transform: translate(-50%, -50%) scale(1); }
+            100% { transform: translate(-50%, -50%) scale(1.05); }
+        }
+        
+        .hit-effect {
+            position: absolute;
+            font-size: 60px;
+            pointer-events: none;
+            animation: hitAnim 0.5s forwards;
+            z-index: 3;
+            transform: translate(-50%, -50%);
+        }
+        
+        @keyframes hitAnim {
+            0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(2.5); opacity: 0; }
+        }
+        
+        .screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 20;
+            padding: 20px;
+            text-align: center;
+            overflow-y: auto;
+        }
+        
+        .title {
+            font-size: 42px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #ff9800;
+            text-shadow: 0 0 10px rgba(255, 152, 0, 0.5);
+        }
+        
+        .subtitle {
+            font-size: 18px;
+            margin-bottom: 30px;
+            color: #b0b0b0;
+            max-width: 500px;
+            line-height: 1.4;
+            padding: 0 10px;
+        }
+        
+        .game-rules {
+            background-color: rgba(255, 152, 0, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 25px;
+            max-width: 500px;
+            border: 1px solid rgba(255, 152, 0, 0.2);
+        }
+        
+        .rules-title {
+            font-size: 20px;
+            color: #ff9800;
+            margin-bottom: 10px;
+        }
+        
+        .rules-list {
+            text-align: left;
+            padding-left: 20px;
+        }
+        
+        .rules-list li {
+            margin-bottom: 8px;
+            font-size: 15px;
+            color: #ddd;
+        }
+        
+        .emoji-info {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            max-width: 500px;
+            padding: 0 10px;
+        }
+        
+        .emoji-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 32px;
+            width: 80px;
+        }
+        
+        .emoji-desc {
+            font-size: 13px;
+            margin-top: 8px;
+            color: #ccc;
+            text-align: center;
+        }
+        
+        .button {
+            background-color: #ff9800;
+            color: #000;
+            border: none;
+            border-radius: 50px;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 8px;
+            transition: all 0.2s;
+            box-shadow: 0 5px 15px rgba(255, 152, 0, 0.3);
+            min-width: 200px;
+        }
+        
+        .button:hover {
+            background-color: #ffb74d;
+            transform: translateY(-3px);
+        }
+        
+        .button:active {
+            transform: translateY(1px);
+        }
+        
+        .stats-table {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 15px;
+            width: 90%;
+            max-width: 500px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .stats-title {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: #ff9800;
+        }
+        
+        .stats-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 16px;
+        }
+        
+        .stats-item:last-child {
+            border-bottom: none;
+        }
+        
+        .score-value {
+            font-weight: bold;
+            color: #ff9800;
+        }
+        
+        .game-over {
+            color: #ff5252;
+            font-size: 36px;
+            margin-bottom: 15px;
+        }
+        
+        .final-score {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        .screen-info {
+            font-size: 14px;
+            color: #888;
+            margin-top: 20px;
+            text-align: center;
+            padding: 0 10px;
+        }
+        
+        .urgent-timer {
+            animation: timerPulse 1s infinite alternate;
+        }
+        
+        @keyframes timerPulse {
+            0% { box-shadow: 0 0 5px rgba(244, 67, 54, 0.5); }
+            100% { box-shadow: 0 0 15px rgba(244, 67, 54, 0.8); }
+        }
+        
+        @media (max-height: 600px) {
+            .title {
+                font-size: 32px;
+                margin-bottom: 15px;
+            }
+            
+            .subtitle {
+                font-size: 16px;
+                margin-bottom: 20px;
+            }
+            
+            .emoji-info {
+                margin-bottom: 20px;
+                gap: 10px;
+            }
+            
+            .emoji-item {
+                width: 70px;
+                font-size: 28px;
+            }
+            
+            .button {
+                padding: 12px 25px;
+                font-size: 16px;
+                min-width: 180px;
+            }
+            
+            .insect {
+                font-size: 42px;
+            }
+        }
+        
+        @media (max-width: 380px) {
+            .title {
+                font-size: 28px;
+            }
+            
+            .subtitle {
+                font-size: 14px;
+            }
+            
+            .emoji-item {
+                width: 65px;
+                font-size: 24px;
+            }
+            
+            .button {
+                padding: 10px 20px;
+                font-size: 14px;
+                min-width: 160px;
+            }
+            
+            .header {
+                padding: 8px 10px;
+            }
+            
+            .stat-item {
+                font-size: 12px;
+            }
+            
+            .health-bar {
+                width: 80px;
+            }
+            
+            .insect {
+                font-size: 40px;
+            }
+        }
+        
+        @media (orientation: landscape) and (max-height: 500px) {
+            .title {
+                font-size: 28px;
+                margin-bottom: 10px;
+            }
+            
+            .subtitle {
+                font-size: 14px;
+                margin-bottom: 15px;
+            }
+            
+            .emoji-info {
+                margin-bottom: 15px;
+                gap: 8px;
+            }
+            
+            .button {
+                padding: 8px 16px;
+                font-size: 14px;
+                min-width: 140px;
+                margin: 5px;
+            }
+            
+            .stats-table {
+                padding: 10px;
+                margin: 10px;
+            }
+            
+            .insect {
+                font-size: 36px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-wrapper">
+        <div class="game-container">
+            <!-- Экран начала игры -->
+            <div id="startScreen" class="screen">
+                <h1 class="title">КОМАР</h1>
+                <p class="subtitle">Уничтожайте комаров 🦟, избегайте пчёл 🐝, собирайте божьих коровок 🐞 для здоровья. Мухи 🪰 - просто отвлекают.</p>
+                
+                <div class="game-rules">
+                    <div class="rules-title">Правила игры:</div>
+                    <ul class="rules-list">
+                        <li>Убивайте комаров 🦟 чтобы получить очки</li>
+                        <li>Избегайте пчёл 🐝 - они отнимают здоровье</li>
+                        <li>Собирайте божьих коровок 🐞 для восстановления здоровья</li>
+                        <li>Мухи 🪰 просто летают и не влияют на игру</li>
+                        <li>У вас есть 10 секунд чтобы убить комара!</li>
+                        <li>Каждый убитый комар сбрасывает таймер на 10 секунд</li>
+                        <li>Если таймер достигнет нуля - игра окончена</li>
+                    </ul>
+                </div>
+                
+                <div class="emoji-info">
+                    <div class="emoji-item">
+                        <div>🦟</div>
+                        <div class="emoji-desc">Комары<br>+1 очко<br>Сбрасывает таймер</div>
+                    </div>
+                    <div class="emoji-item">
+                        <div>🐝</div>
+                        <div class="emoji-desc">Пчёлы<br>-1 здоровье</div>
+                    </div>
+                    <div class="emoji-item">
+                        <div>🐞</div>
+                        <div class="emoji-desc">Божья коровка<br>+1 здоровье</div>
+                    </div>
+                    <div class="emoji-item">
+                        <div>🪰</div>
+                        <div class="emoji-desc">Мухи<br>без последствий</div>
+                    </div>
+                </div>
+                
+                <button id="startButton" class="button">НАЧАТЬ ИГРУ</button>
+                <button id="showStatsButton" class="button">СТАТИСТИКА</button>
+                <div class="screen-info">Игра адаптирована под все размеры экранов</div>
+            </div>
+            
+            <!-- Экран статистики -->
+            <div id="statsScreen" class="screen hidden">
+                <h2 class="stats-title">СТАТИСТИКА</h2>
+                <div class="stats-table">
+                    <div class="stats-item">
+                        <span>Всего убито комаров:</span>
+                        <span id="totalMosquitoes" class="score-value">0</span>
+                    </div>
+                    <div class="stats-item">
+                        <span>Рекорд убитых за игру:</span>
+                        <span id="bestMosquitoes" class="score-value">0</span>
+                    </div>
+                    <div class="stats-item">
+                        <span>Лучшее время выживания:</span>
+                        <span id="bestTime" class="score-value">0 сек</span>
+                    </div>
+                    <div class="stats-item">
+                        <span>Всего игр:</span>
+                        <span id="totalGames" class="score-value">0</span>
+                    </div>
+                </div>
+                <button id="backToMenuButton" class="button">НАЗАД В МЕНЮ</button>
+            </div>
+            
+            <!-- Игровой экран -->
+            <div id="gameScreen" class="screen hidden">
+                <div class="header">
+                    <div class="stats">
+                        <div class="stat-item">Убито комаров: <span id="score">0</span></div>
+                        <div class="stat-item">Время игры: <span id="time">0</span> сек</div>
+                        <div class="timer-container">
+                            <div class="timer-bar">
+                                <div id="timerFill" class="timer-fill" style="width: 100%"></div>
+                                <div id="timerText" class="timer-text">10</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="health-container">
+                        <div class="stat-item">Здоровье:</div>
+                        <div class="health-bar">
+                            <div id="healthFill" class="health-fill" style="width: 100%"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="game-area" id="gameArea">
+                    <div class="game-area-border"></div>
+                </div>
+            </div>
+            
+            <!-- Экран окончания игры -->
+            <div id="gameOverScreen" class="screen hidden">
+                <h2 class="game-over">ИГРА ОКОНЧЕНА</h2>
+                <div class="final-score">Убито комаров: <span id="finalScore">0</span></div>
+                <div class="final-score">Время выживания: <span id="finalTime">0</span> сек</div>
+                <div class="final-score" id="endReason">Таймер истёк</div>
+                
+                <div class="stats-table">
+                    <div class="stats-item">
+                        <span>Комаров убито:</span>
+                        <span id="endMosquitoes" class="score-value">0</span>
+                    </div>
+                    <div class="stats-item">
+                        <span>Пчёл встречено:</span>
+                        <span id="endBees" class="score-value">0</span>
+                    </div>
+                    <div class="stats-item">
+                        <span>Божьих коровок собрано:</span>
+                        <span id="endLadybugs" class="scoreValue">0</span>
+                    </div>
+                    <div class="stats-item">
+                        <span>Мух увидели:</span>
+                        <span id="endFlies" class="scoreValue">0</span>
+                    </div>
+                </div>
+                
+                <button id="restartButton" class="button">ИГРАТЬ СНОВА</button>
+                <button id="menuButton" class="button">ГЛАВНОЕ МЕНЮ</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Игровые переменные
+        let gameState = {
+            score: 0,
+            time: 0,
+            health: 5,
+            maxHealth: 5,
+            gameActive: false,
+            gameTimeInterval: null,
+            timerInterval: null,
+            timerValue: 10,
+            maxTimer: 10,
+            insects: [],
+            insectsCount: 0,
+            stats: {
+                mosquitoes: 0,
+                bees: 0,
+                ladybugs: 0,
+                flies: 0
+            },
+            gameAreaSize: {
+                width: 0,
+                height: 0
+            }
+        };
+
+        // Локальное хранилище для статистики
+        let gameStats = {
+            totalMosquitoes: 0,
+            bestMosquitoes: 0,
+            bestTime: 0,
+            totalGames: 0
+        };
+
+        // Загрузка статистики из localStorage
+        function loadStats() {
+            const savedStats = localStorage.getItem('komarStats');
+            if (savedStats) {
+                gameStats = JSON.parse(savedStats);
+            }
+            updateStatsDisplay();
+        }
+
+        // Сохранение статистики в localStorage
+        function saveStats() {
+            localStorage.setItem('komarStats', JSON.stringify(gameStats));
+            updateStatsDisplay();
+        }
+
+        // Обновление отображения статистики
+        function updateStatsDisplay() {
+            document.getElementById('totalMosquitoes').textContent = gameStats.totalMosquitoes;
+            document.getElementById('bestMosquitoes').textContent = gameStats.bestMosquitoes;
+            document.getElementById('bestTime').textContent = gameStats.bestTime + ' сек';
+            document.getElementById('totalGames').textContent = gameStats.totalGames;
+        }
+
+        // Обновление отображения игровых данных
+        function updateGameDisplay() {
+            document.getElementById('score').textContent = gameState.score;
+            document.getElementById('time').textContent = gameState.time;
+            const healthPercent = (gameState.health / gameState.maxHealth) * 100;
+            document.getElementById('healthFill').style.width = `${healthPercent}%`;
+            
+            // Обновление таймера
+            const timerPercent = (gameState.timerValue / gameState.maxTimer) * 100;
+            const timerFill = document.getElementById('timerFill');
+            const timerText = document.getElementById('timerText');
+            const timerBar = document.querySelector('.timer-bar');
+            
+            timerFill.style.width = `${timerPercent}%`;
+            timerText.textContent = Math.ceil(gameState.timerValue);
+            
+            // Изменение цвета таймера в зависимости от оставшегося времени
+            if (gameState.timerValue <= 3) {
+                timerFill.style.background = 'linear-gradient(90deg, #FF9800 0%, #F44336 100%)';
+                timerBar.classList.add('urgent-timer');
+            } else if (gameState.timerValue <= 6) {
+                timerFill.style.background = 'linear-gradient(90deg, #4CAF50 0%, #FF9800 100%)';
+                timerBar.classList.remove('urgent-timer');
+            } else {
+                timerFill.style.background = 'linear-gradient(90deg, #4CAF50 0%, #4CAF50 100%)';
+                timerBar.classList.remove('urgent-timer');
+            }
+        }
+
+        // Сброс таймера
+        function resetTimer() {
+            gameState.timerValue = gameState.maxTimer;
+            updateGameDisplay();
+        }
+
+        // Запуск таймера
+        function startTimer() {
+            if (gameState.timerInterval) {
+                clearInterval(gameState.timerInterval);
+            }
+            
+            gameState.timerInterval = setInterval(() => {
+                if (gameState.gameActive) {
+                    gameState.timerValue -= 0.1; // Уменьшаем каждые 100 мс для плавности
+                    
+                    if (gameState.timerValue <= 0) {
+                        gameState.timerValue = 0;
+                        endGame("Время вышло! Не успели убить комара.");
+                    }
+                    
+                    updateGameDisplay();
+                }
+            }, 100);
+        }
+
+        // Получение актуальных размеров игровой области
+        function getGameAreaSize() {
+            const gameArea = document.getElementById('gameArea');
+            if (!gameArea) return { width: 0, height: 0 };
+            
+            const width = gameArea.clientWidth;
+            const height = gameArea.clientHeight;
+            
+            gameState.gameAreaSize = { width, height };
+            return { width, height };
+        }
+
+        // Создание насекомого
+        function createInsect(type) {
+            const gameArea = document.getElementById('gameArea');
+            
+            // Проверяем, что игровая область существует и игра активна
+            if (!gameArea || !gameState.gameActive) return;
+            
+            // Получаем актуальные размеры игровой области
+            const { width: areaWidth, height: areaHeight } = getGameAreaSize();
+            
+            // Если область слишком мала, не создаем насекомых
+            if (areaWidth < 50 || areaHeight < 50) return;
+            
+            const insect = document.createElement('div');
+            insect.className = 'insect';
+            insect.textContent = type;
+            
+            // Добавляем класс для комаров для анимации
+            if (type === '🦟') {
+                insect.classList.add('mosquito');
+            }
+            
+            // Начальная позиция (случайный край экрана)
+            const startSide = Math.floor(Math.random() * 4); // 0: верх, 1: право, 2: низ, 3: лево
+            let startX, startY;
+            
+            // Определяем случайное смещение от края (в процентах от размера экрана)
+            const offset = Math.max(50, Math.min(areaWidth, areaHeight) * 0.05); // 5% от меньшей стороны, но не меньше 50px
+            
+            switch(startSide) {
+                case 0: // верх
+                    startX = Math.random() * areaWidth;
+                    startY = -offset;
+                    break;
+                case 1: // право
+                    startX = areaWidth + offset;
+                    startY = Math.random() * areaHeight;
+                    break;
+                case 2: // низ
+                    startX = Math.random() * areaWidth;
+                    startY = areaHeight + offset;
+                    break;
+                case 3: // лево
+                    startX = -offset;
+                    startY = Math.random() * areaHeight;
+                    break;
+            }
+            
+            // Устанавливаем начальную позицию
+            insect.style.left = `${startX}px`;
+            insect.style.top = `${startY}px`;
+            
+            // Конечная позиция (противоположный край)
+            let endX, endY;
+            
+            switch(startSide) {
+                case 0: // начали сверху, летим вниз
+                    endX = Math.random() * areaWidth;
+                    endY = areaHeight + offset;
+                    break;
+                case 1: // начали справа, летим влево
+                    endX = -offset;
+                    endY = Math.random() * areaHeight;
+                    break;
+                case 2: // начали снизу, летим вверх
+                    endX = Math.random() * areaWidth;
+                    endY = -offset;
+                    break;
+                case 3: // начали слева, летим вправо
+                    endX = areaWidth + offset;
+                    endY = Math.random() * areaHeight;
+                    break;
+            }
+            
+            // Для мух - увеличенная скорость
+            let speedModifier = 1;
+            if (type === '🪰') {
+                speedModifier = 1.5; // Мухи на 50% быстрее
+            }
+            
+            // Время полета (зависит от уровня сложности и типа насекомого)
+            const baseSpeed = 4000 + Math.random() * 2000; // 4-6 секунд
+            const timeModifier = Math.max(1, gameState.time / 30); // каждые 30 секунд увеличиваем скорость
+            const flightTime = (baseSpeed / timeModifier) / speedModifier;
+            
+            // Создаем анимацию с использованием requestAnimationFrame
+            const startTime = Date.now();
+            
+            function animateInsect() {
+                if (!gameState.gameActive || !insect.parentNode) return;
+                
+                const elapsed = Date.now() - startTime;
+                const progress = Math.min(elapsed / flightTime, 1);
+                
+                // Вычисляем текущую позицию
+                const currentX = startX + (endX - startX) * progress;
+                const currentY = startY + (endY - startY) * progress;
+                
+                insect.style.left = `${currentX}px`;
+                insect.style.top = `${currentY}px`;
+                
+                // Если анимация не завершена, продолжаем
+                if (progress < 1) {
+                    requestAnimationFrame(animateInsect);
+                } else {
+                    // Удаляем насекомое после завершения анимации
+                    if (insect.parentNode) {
+                        insect.remove();
+                        const index = gameState.insects.indexOf(insect);
+                        if (index > -1) {
+                            gameState.insects.splice(index, 1);
+                        }
+                        gameState.insectsCount--;
+                    }
+                }
+            }
+            
+            // Запускаем анимацию
+            requestAnimationFrame(animateInsect);
+            
+            // Обработчик клика/касания
+            insect.addEventListener('click', () => handleInsectClick(insect, type));
+            insect.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                handleInsectClick(insect, type);
+            }, { passive: false });
+            
+            gameArea.appendChild(insect);
+            gameState.insects.push(insect);
+            gameState.insectsCount++;
+            
+            // Обновление статистики
+            switch(type) {
+                case '🦟': gameState.stats.mosquitoes++; break;
+                case '🐝': gameState.stats.bees++; break;
+                case '🐞': gameState.stats.ladybugs++; break;
+                case '🪰': gameState.stats.flies++; break;
+            }
+        }
+
+        // Обработка клика по насекомому
+        function handleInsectClick(insect, type) {
+            if (!gameState.gameActive) return;
+            
+            // Получаем позицию для эффекта попадания
+            const rect = insect.getBoundingClientRect();
+            
+            // Эффект попадания
+            const hitEffect = document.createElement('div');
+            hitEffect.className = 'hit-effect';
+            hitEffect.textContent = '💥';
+            
+            // Копируем позицию насекомого
+            hitEffect.style.left = insect.style.left;
+            hitEffect.style.top = insect.style.top;
+            
+            document.getElementById('gameArea').appendChild(hitEffect);
+            
+            // Удаление эффекта через 0.5 секунды
+            setTimeout(() => {
+                if (hitEffect.parentNode) hitEffect.remove();
+            }, 500);
+            
+            // Удаление насекомого
+            if (insect.parentNode) {
+                insect.remove();
+                const index = gameState.insects.indexOf(insect);
+                if (index > -1) {
+                    gameState.insects.splice(index, 1);
+                }
+                gameState.insectsCount--;
+            }
+            
+            // Обработка в зависимости от типа насекомого
+            switch(type) {
+                case '🦟': // Комары
+                    gameState.score++;
+                    resetTimer(); // Сбрасываем таймер при убийстве комара
+                    updateGameDisplay();
+                    break;
+                    
+                case '🐝': // Пчелы
+                    gameState.health--;
+                    updateGameDisplay();
+                    if (gameState.health <= 0) {
+                        endGame("Здоровье закончилось!");
+                    }
+                    break;
+                    
+                case '🐞': // Божьи коровки
+                    if (gameState.health < gameState.maxHealth) {
+                        gameState.health++;
+                        updateGameDisplay();
+                    }
+                    break;
+                    
+                case '🪰': // Мухи
+                    // Ничего не делаем, просто отвлекающий элемент
+                    break;
+            }
+        }
+
+        // Генерация насекомых
+        function generateInsects() {
+            if (!gameState.gameActive) return;
+            
+            // Получаем размеры игровой области
+            const { width, height } = getGameAreaSize();
+            
+            // Если область слишком мала, не генерируем насекомых
+            if (width < 100 || height < 100) return;
+            
+            // Определяем количество насекомых в зависимости от времени и размера экрана
+            const baseCount = 3;
+            const timeBonus = Math.floor(gameState.time / 30); // каждые 30 секунд +1 насекомое
+            
+            // Учитываем размер экрана: на больших экранах можно больше насекомых
+            const screenFactor = Math.min(width * height / (400 * 800), 1.5); // Нормализуем к эталону 400x800
+            const maxInsects = Math.min(baseCount + timeBonus, Math.floor(8 * screenFactor)); // максимум зависит от размера экрана
+            
+            // Если насекомых меньше максимального количества, добавляем новые
+            if (gameState.insectsCount < maxInsects) {
+                // Вероятности появления разных насекомых
+                // Увеличиваем шанс появления комаров, чтобы игрок мог сбрасывать таймер
+                const insectTypes = ['🦟', '🦟', '🦟', '🦟', '🦟', '🦟', '🐝', '🐝', '🐞', '🪰', '🪰'];
+                const randomType = insectTypes[Math.floor(Math.random() * insectTypes.length)];
+                createInsect(randomType);
+            }
+            
+            // Планируем следующую генерацию с учетом времени и размера экрана
+            const baseInterval = 1200;
+            const timePenalty = Math.min(gameState.time * 8, 400); // увеличиваем частоту до определенного предела
+            
+            // На маленьких экранах насекомые появляются реже
+            const screenSizePenalty = width < 300 ? 300 : 0;
+            
+            const nextGeneration = Math.max(baseInterval - timePenalty + screenSizePenalty, 600); // минимум 600мс
+            
+            setTimeout(generateInsects, nextGeneration);
+        }
+
+        // Таймер игры
+        function startGameTimer() {
+            gameState.gameTimeInterval = setInterval(() => {
+                if (gameState.gameActive) {
+                    gameState.time++;
+                    updateGameDisplay();
+                }
+            }, 1000);
+        }
+
+        // Начало игры
+        function startGame() {
+            // Сброс состояния
+            gameState.score = 0;
+            gameState.time = 0;
+            gameState.health = 5;
+            gameState.timerValue = 10;
+            gameState.gameActive = true;
+            gameState.insects = [];
+            gameState.insectsCount = 0;
+            gameState.stats = { mosquitoes: 0, bees: 0, ladybugs: 0, flies: 0 };
+            
+            // Очистка игровой области
+            const gameArea = document.getElementById('gameArea');
+            if (gameArea) {
+                gameArea.innerHTML = '<div class="game-area-border"></div>';
+            }
+            
+            // Получаем актуальные размеры игровой области
+            getGameAreaSize();
+            
+            // Обновление дисплея
+            updateGameDisplay();
+            
+            // Показ игрового экрана
+            document.getElementById('startScreen').classList.add('hidden');
+            document.getElementById('statsScreen').classList.add('hidden');
+            document.getElementById('gameOverScreen').classList.add('hidden');
+            document.getElementById('gameScreen').classList.remove('hidden');
+            
+            // Запуск таймеров
+            if (gameState.gameTimeInterval) {
+                clearInterval(gameState.gameTimeInterval);
+            }
+            if (gameState.timerInterval) {
+                clearInterval(gameState.timerInterval);
+            }
+            
+            startGameTimer();
+            startTimer();
+            
+            // Запуск генерации насекомых с небольшой задержкой
+            setTimeout(() => {
+                generateInsects();
+            }, 300);
+        }
+
+        // Очистка всех насекомых
+        function clearAllInsects() {
+            const gameArea = document.getElementById('gameArea');
+            if (gameArea) {
+                gameArea.innerHTML = '<div class="game-area-border"></div>';
+            }
+            gameState.insects = [];
+            gameState.insectsCount = 0;
+        }
+
+        // Окончание игры
+        function endGame(reason = "Игра окончена") {
+            gameState.gameActive = false;
+            
+            // Остановка всех таймеров
+            if (gameState.gameTimeInterval) {
+                clearInterval(gameState.gameTimeInterval);
+            }
+            if (gameState.timerInterval) {
+                clearInterval(gameState.timerInterval);
+            }
+            
+            // Обновление статистики
+            gameStats.totalGames++;
+            gameStats.totalMosquitoes += gameState.score;
+            
+            if (gameState.score > gameStats.bestMosquitoes) {
+                gameStats.bestMosquitoes = gameState.score;
+            }
+            
+            if (gameState.time > gameStats.bestTime) {
+                gameStats.bestTime = gameState.time;
+            }
+            
+            saveStats();
+            
+            // Обновление экрана окончания игры
+            document.getElementById('finalScore').textContent = gameState.score;
+            document.getElementById('finalTime').textContent = gameState.time;
+            document.getElementById('endReason').textContent = reason;
+            document.getElementById('endMosquitoes').textContent = gameState.stats.mosquitoes;
+            document.getElementById('endBees').textContent = gameState.stats.bees;
+            document.getElementById('endLadybugs').textContent = gameState.stats.ladybugs;
+            document.getElementById('endFlies').textContent = gameState.stats.flies;
+            
+            // Показ экрана окончания игры
+            document.getElementById('gameScreen').classList.add('hidden');
+            document.getElementById('gameOverScreen').classList.remove('hidden');
+            
+            // Очистка игровой области
+            clearAllInsects();
+        }
+
+        // Обработчики кнопок
+        document.getElementById('startButton').addEventListener('click', startGame);
+        document.getElementById('restartButton').addEventListener('click', startGame);
+        
+        document.getElementById('showStatsButton').addEventListener('click', () => {
+            document.getElementById('startScreen').classList.add('hidden');
+            document.getElementById('statsScreen').classList.remove('hidden');
+        });
+        
+        document.getElementById('backToMenuButton').addEventListener('click', () => {
+            document.getElementById('statsScreen').classList.add('hidden');
+            document.getElementById('startScreen').classList.remove('hidden');
+        });
+        
+        document.getElementById('menuButton').addEventListener('click', () => {
+            document.getElementById('gameOverScreen').classList.add('hidden');
+            document.getElementById('startScreen').classList.remove('hidden');
+            clearAllInsects();
+        });
+
+        // Обработка изменения размера экрана
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                // Обновляем размеры игровой области
+                getGameAreaSize();
+                
+                // Если игра активна, пересчитываем позиции насекомых
+                if (gameState.gameActive) {
+                    // Очищаем и перезапускаем генерацию насекомых
+                    clearAllInsects();
+                    setTimeout(generateInsects, 300);
+                }
+            }, 200);
+        });
+
+        // Загрузка статистики при запуске
+        window.addEventListener('DOMContentLoaded', () => {
+            loadStats();
+            
+            // Инициализируем размеры игровой области
+            getGameAreaSize();
+            
+            // Настройка для мобильных устройств
+            if ('ontouchstart' in window) {
+                document.body.style.cursor = 'pointer';
+            }
+        });
+        
+        // Предотвращение контекстного меню на длинное нажатие
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            return false;
+        });
+    </script>
+</body>
+</html>
