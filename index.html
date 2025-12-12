@@ -62,11 +62,11 @@
             }
             
             .insect {
-                filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.3));
+                filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.3));
             }
             
             .hit-effect {
-                text-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+                text-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
             }
         }
         
@@ -108,7 +108,7 @@
         }
         
         .header {
-            padding: 8px 12px;
+            padding: 6px 10px;
             background-color: var(--bg-overlay);
             display: flex;
             justify-content: space-between;
@@ -123,57 +123,57 @@
         .stats {
             display: flex;
             flex-direction: column;
-            gap: 3px;
-            min-width: 140px;
+            gap: 2px;
+            min-width: 120px;
         }
         
         .stat-item {
-            font-size: 13px;
+            font-size: 11px;
             font-weight: 500;
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 4px;
             color: var(--text-primary);
         }
         
         .stat-value {
             font-weight: bold;
             color: var(--text-accent);
-            font-size: 14px;
+            font-size: 12px;
         }
         
         .health-container {
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 4px;
         }
         
         .health-bar {
-            width: 80px;
-            height: 8px;
+            width: 64px;
+            height: 6px;
             background-color: var(--bg-surface-light);
-            border-radius: 4px;
+            border-radius: 3px;
             overflow: hidden;
         }
         
         .health-fill {
             height: 100%;
             background-color: var(--health-color);
-            border-radius: 4px;
+            border-radius: 3px;
             transition: width 0.3s ease;
         }
         
         .timer-container {
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 4px;
         }
         
         .timer-bar {
-            width: 80px;
-            height: 8px;
+            width: 64px;
+            height: 6px;
             background-color: var(--bg-surface-light);
-            border-radius: 4px;
+            border-radius: 3px;
             overflow: hidden;
             position: relative;
         }
@@ -181,7 +181,7 @@
         .timer-fill {
             height: 100%;
             background: linear-gradient(90deg, var(--timer-green) 0%, var(--timer-orange) 50%, var(--timer-red) 100%);
-            border-radius: 4px;
+            border-radius: 3px;
             width: 100%;
             transition: width 0.1s linear;
         }
@@ -191,10 +191,10 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 10px;
+            font-size: 9px;
             font-weight: bold;
             color: var(--text-primary);
-            text-shadow: 0 0 2px var(--shadow-color);
+            text-shadow: 0 0 1px var(--shadow-color);
             z-index: 2;
         }
         
@@ -220,19 +220,19 @@
         
         .insect {
             position: absolute;
-            font-size: 48px;
+            font-size: 38px; /* Базовый размер */
             cursor: pointer;
             transition: transform 0.1s;
             z-index: 2;
-            text-shadow: 0 0 12px var(--shadow-color);
+            text-shadow: 0 0 10px var(--shadow-color);
             pointer-events: auto;
             transform: translate(-50%, -50%);
             will-change: transform;
-            filter: drop-shadow(0 0 5px var(--shadow-color));
+            filter: drop-shadow(0 0 4px var(--shadow-color));
         }
         
         .insect:hover {
-            transform: translate(-50%, -50%) scale(1.15);
+            transform: translate(-50%, -50%) scale(1.12);
         }
         
         .insect.mosquito {
@@ -241,12 +241,12 @@
         
         @keyframes mosquitoFloat {
             0% { transform: translate(-50%, -50%) scale(1); }
-            100% { transform: translate(-50%, -50%) scale(1.05); }
+            100% { transform: translate(-50%, -50%) scale(1.04); }
         }
         
         .hit-effect {
             position: absolute;
-            font-size: 60px;
+            font-size: 48px;
             pointer-events: none;
             animation: hitAnim 0.5s forwards;
             z-index: 3;
@@ -255,7 +255,7 @@
         
         @keyframes hitAnim {
             0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; }
-            100% { transform: translate(-50%, -50%) scale(2.5); opacity: 0; }
+            100% { transform: translate(-50%, -50%) scale(2.0); opacity: 0; }
         }
         
         .screen {
@@ -270,53 +270,53 @@
             align-items: center;
             background-color: var(--bg-overlay);
             z-index: 20;
-            padding: 15px;
+            padding: 12px;
             text-align: center;
             overflow-y: auto;
             transition: background 0.3s ease;
         }
         
         .title {
-            font-size: 36px;
+            font-size: 29px;
             font-weight: bold;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             color: var(--text-accent);
-            text-shadow: 0 0 8px color-mix(in srgb, var(--text-accent) 50%, transparent);
+            text-shadow: 0 0 6px color-mix(in srgb, var(--text-accent) 50%, transparent);
         }
         
         .game-rules {
             background-color: color-mix(in srgb, var(--text-accent) 8%, transparent);
-            border-radius: 8px;
-            padding: 12px;
-            margin-bottom: 20px;
-            max-width: 420px;
+            border-radius: 6px;
+            padding: 10px;
+            margin-bottom: 16px;
+            max-width: 336px;
             border: 1px solid color-mix(in srgb, var(--text-accent) 15%, transparent);
         }
         
         .rules-title {
-            font-size: 16px;
+            font-size: 13px;
             color: var(--text-accent);
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
         
         .rules-list {
             text-align: left;
-            padding-left: 15px;
+            padding-left: 12px;
         }
         
         .rules-list li {
-            margin-bottom: 6px;
-            font-size: 13px;
+            margin-bottom: 5px;
+            font-size: 11px;
             color: var(--text-secondary);
-            line-height: 1.3;
+            line-height: 1.2;
         }
         
         .emoji-info {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 12px;
-            margin-bottom: 20px;
+            gap: 10px;
+            margin-bottom: 16px;
             max-width: 420px;
             padding: 0 5px;
         }
@@ -325,38 +325,38 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            font-size: 28px;
-            width: 70px;
+            font-size: 22px;
+            width: 56px;
         }
         
         .emoji-desc {
-            font-size: 11px;
-            margin-top: 5px;
+            font-size: 9px;
+            margin-top: 4px;
             color: var(--text-secondary);
             text-align: center;
-            line-height: 1.2;
+            line-height: 1.1;
         }
         
         .button-container {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 8px;
-            margin-top: 5px;
+            gap: 6px;
+            margin-top: 4px;
         }
         
         .button {
             background-color: var(--button-bg);
             color: var(--button-text);
             border: none;
-            border-radius: 25px;
-            padding: 12px 24px;
-            font-size: 15px;
+            border-radius: 20px;
+            padding: 10px 20px;
+            font-size: 12px;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.2s;
-            box-shadow: 0 4px 10px color-mix(in srgb, var(--button-bg) 20%, transparent);
-            min-width: 180px;
+            box-shadow: 0 3px 8px color-mix(in srgb, var(--button-bg) 20%, transparent);
+            min-width: 144px;
         }
         
         .button:hover {
@@ -370,27 +370,27 @@
         
         .stats-table {
             background-color: var(--bg-surface);
-            border-radius: 10px;
-            padding: 15px;
-            margin: 10px;
+            border-radius: 8px;
+            padding: 12px;
+            margin: 8px;
             width: 90%;
-            max-width: 400px;
+            max-width: 320px;
             backdrop-filter: blur(10px);
             border: 1px solid var(--border-color);
         }
         
         .stats-title {
-            font-size: 20px;
-            margin-bottom: 12px;
+            font-size: 16px;
+            margin-bottom: 10px;
             color: var(--text-accent);
         }
         
         .stats-item {
             display: flex;
             justify-content: space-between;
-            padding: 8px 0;
+            padding: 6px 0;
             border-bottom: 1px solid var(--border-color);
-            font-size: 14px;
+            font-size: 12px;
             color: var(--text-primary);
         }
         
@@ -405,13 +405,13 @@
         
         .game-over {
             color: var(--timer-red);
-            font-size: 30px;
-            margin-bottom: 12px;
+            font-size: 24px;
+            margin-bottom: 10px;
         }
         
         .final-score {
-            font-size: 20px;
-            margin-bottom: 15px;
+            font-size: 16px;
+            margin-bottom: 12px;
             color: var(--text-primary);
         }
         
@@ -424,146 +424,146 @@
         }
         
         @keyframes timerPulse {
-            0% { box-shadow: 0 0 3px color-mix(in srgb, var(--timer-red) 40%, transparent); }
-            100% { box-shadow: 0 0 8px color-mix(in srgb, var(--timer-red) 70%, transparent); }
+            0% { box-shadow: 0 0 2px color-mix(in srgb, var(--timer-red) 40%, transparent); }
+            100% { box-shadow: 0 0 6px color-mix(in srgb, var(--timer-red) 70%, transparent); }
         }
         
         /* Индикатор темы (для демонстрации) */
         .theme-indicator {
             position: absolute;
-            top: 10px;
-            right: 10px;
-            width: 24px;
-            height: 24px;
+            top: 8px;
+            right: 8px;
+            width: 20px;
+            height: 20px;
             border-radius: 50%;
             background-color: var(--text-accent);
             z-index: 100;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 12px;
+            font-size: 10px;
             color: var(--button-text);
             opacity: 0.7;
         }
         
         @media (max-height: 600px) {
             .title {
-                font-size: 28px;
-                margin-bottom: 10px;
-            }
-            
-            .game-rules {
-                padding: 10px;
-                margin-bottom: 15px;
-                max-width: 380px;
-            }
-            
-            .rules-title {
-                font-size: 14px;
-            }
-            
-            .rules-list li {
-                font-size: 12px;
-                margin-bottom: 4px;
-            }
-            
-            .emoji-info {
-                margin-bottom: 15px;
-                gap: 8px;
-            }
-            
-            .emoji-item {
-                width: 60px;
-                font-size: 24px;
-            }
-            
-            .button {
-                padding: 10px 20px;
-                font-size: 14px;
-                min-width: 160px;
-            }
-            
-            .insect {
-                font-size: 42px;
-            }
-        }
-        
-        @media (max-width: 380px) {
-            .title {
-                font-size: 24px;
-            }
-            
-            .game-rules {
-                max-width: 340px;
-            }
-            
-            .emoji-item {
-                width: 55px;
-                font-size: 22px;
-            }
-            
-            .button {
-                padding: 8px 16px;
-                font-size: 13px;
-                min-width: 140px;
-            }
-            
-            .header {
-                padding: 6px 8px;
-            }
-            
-            .stat-item {
-                font-size: 11px;
-            }
-            
-            .stat-value {
-                font-size: 12px;
-            }
-            
-            .health-bar, .timer-bar {
-                width: 70px;
-            }
-            
-            .insect {
-                font-size: 40px;
-            }
-        }
-        
-        @media (orientation: landscape) and (max-height: 500px) {
-            .title {
-                font-size: 24px;
+                font-size: 23px;
                 margin-bottom: 8px;
             }
             
             .game-rules {
                 padding: 8px;
-                margin-bottom: 10px;
+                margin-bottom: 12px;
+                max-width: 300px;
+            }
+            
+            .rules-title {
+                font-size: 11px;
+            }
+            
+            .rules-list li {
+                font-size: 10px;
+                margin-bottom: 4px;
+            }
+            
+            .emoji-info {
+                margin-bottom: 12px;
+                gap: 8px;
+            }
+            
+            .emoji-item {
+                width: 50px;
+                font-size: 20px;
+            }
+            
+            .button {
+                padding: 8px 16px;
+                font-size: 11px;
+                min-width: 130px;
+            }
+            
+            .insect {
+                font-size: 34px;
+            }
+        }
+        
+        @media (max-width: 380px) {
+            .title {
+                font-size: 19px;
+            }
+            
+            .game-rules {
+                max-width: 280px;
+            }
+            
+            .emoji-item {
+                width: 45px;
+                font-size: 18px;
+            }
+            
+            .button {
+                padding: 6px 13px;
+                font-size: 10px;
+                min-width: 115px;
+            }
+            
+            .header {
+                padding: 5px 7px;
+            }
+            
+            .stat-item {
+                font-size: 9px;
+            }
+            
+            .stat-value {
+                font-size: 10px;
+            }
+            
+            .health-bar, .timer-bar {
+                width: 56px;
+            }
+            
+            .insect {
+                font-size: 32px;
+            }
+        }
+        
+        @media (orientation: landscape) and (max-height: 500px) {
+            .title {
+                font-size: 19px;
+                margin-bottom: 6px;
+            }
+            
+            .game-rules {
+                padding: 6px;
+                margin-bottom: 8px;
                 max-width: 90%;
             }
             
             .rules-list li {
-                font-size: 11px;
+                font-size: 9px;
             }
             
             .emoji-info {
-                margin-bottom: 10px;
-                gap: 6px;
+                margin-bottom: 8px;
+                gap: 5px;
             }
             
             .button {
-                padding: 6px 12px;
-                font-size: 12px;
-                min-width: 120px;
+                padding: 5px 10px;
+                font-size: 10px;
+                min-width: 100px;
                 margin: 2px;
             }
             
             .stats-table {
-                padding: 10px;
-                margin: 8px;
+                padding: 8px;
+                margin: 6px;
             }
             
             .insect {
-                font-size: 36px;
+                font-size: 29px;
             }
         }
     </style>
@@ -581,12 +581,12 @@
                 <div class="game-rules">
                     <div class="rules-title">Правила:</div>
                     <ul class="rules-list">
-                        <li>Убивайте комаров 🦟 чтобы получить очки</li>
+                        <li>Убивайте комаров 🦟, тараканов 🪳 и мух 🪰 чтобы получить очки</li>
                         <li>Избегайте пчёл 🐝 - они отнимают здоровье</li>
                         <li>Собирайте божьих коровок 🐞 для восстановления здоровья</li>
-                        <li>Мухи 🪰 просто летают и не влияют на игру</li>
-                        <li>У вас есть 10 секунд чтобы убить комара!</li>
-                        <li>Каждый убитый комар сбрасывает таймер на 10 секунд</li>
+                        <li>Жуки 🪲 просто отвлекают и ничего не дают</li>
+                        <li>У вас есть 10 секунд чтобы убить комара, муху или таракана!</li>
+                        <li>Каждый убитый сбрасывает таймер на 10 секунд</li>
                         <li>Если таймер достигнет нуля - игра окончена</li>
                     </ul>
                 </div>
@@ -595,6 +595,10 @@
                     <div class="emoji-item">
                         <div>🦟</div>
                         <div class="emoji-desc">Комары<br>+1 очко<br>Сбрасывает таймер</div>
+                    </div>
+                    <div class="emoji-item">
+                        <div>🪳</div>
+                        <div class="emoji-desc">Тараканы<br>+1 очко<br>Сбрасывает таймер</div>
                     </div>
                     <div class="emoji-item">
                         <div>🐝</div>
@@ -606,7 +610,11 @@
                     </div>
                     <div class="emoji-item">
                         <div>🪰</div>
-                        <div class="emoji-desc">Мухи<br>без последствий</div>
+                        <div class="emoji-desc">Мухи<br>+1 очко<br>Сбрасывает таймер</div>
+                    </div>
+                    <div class="emoji-item">
+                        <div>🪲</div>
+                        <div class="emoji-desc">Жуки<br>без последствий</div>
                     </div>
                 </div>
                 
@@ -621,12 +629,12 @@
                 <h2 class="stats-title">СТАТИСТИКА</h2>
                 <div class="stats-table">
                     <div class="stats-item">
-                        <span>Всего убито комаров:</span>
-                        <span id="totalMosquitoes" class="score-value">0</span>
+                        <span>Всего очков:</span>
+                        <span id="totalPoints" class="score-value">0</span>
                     </div>
                     <div class="stats-item">
-                        <span>Рекорд убитых за игру:</span>
-                        <span id="bestMosquitoes" class="score-value">0</span>
+                        <span>Рекорд очков за игру:</span>
+                        <span id="bestPoints" class="score-value">0</span>
                     </div>
                     <div class="stats-item">
                         <span>Лучшее время выживания:</span>
@@ -644,7 +652,7 @@
             <div id="gameScreen" class="screen hidden">
                 <div class="header">
                     <div class="stats">
-                        <div class="stat-item">Комары: <span id="score" class="stat-value">0</span></div>
+                        <div class="stat-item">Очки: <span id="score" class="stat-value">0</span></div>
                         <div class="stat-item">Время: <span id="time" class="stat-value">0</span> сек</div>
                         <div class="timer-container">
                             <div class="stat-item">Таймер:</div>
@@ -671,7 +679,7 @@
             <!-- Экран окончания игры -->
             <div id="gameOverScreen" class="screen hidden">
                 <h2 class="game-over">ИГРА ОКОНЧЕНА</h2>
-                <div class="final-score">Убито комаров: <span id="finalScore">0</span></div>
+                <div class="final-score">Набрано очков: <span id="finalScore">0</span></div>
                 <div class="final-score">Время выживания: <span id="finalTime">0</span> сек</div>
                 <div class="final-score" id="endReason">Таймер истёк</div>
                 
@@ -681,16 +689,24 @@
                         <span id="endMosquitoes" class="score-value">0</span>
                     </div>
                     <div class="stats-item">
+                        <span>Тараканов убито:</span>
+                        <span id="endCockroaches" class="score-value">0</span>
+                    </div>
+                    <div class="stats-item">
+                        <span>Мух убито:</span>
+                        <span id="endFlies" class="score-value">0</span>
+                    </div>
+                    <div class="stats-item">
                         <span>Пчёл встречено:</span>
                         <span id="endBees" class="score-value">0</span>
                     </div>
                     <div class="stats-item">
                         <span>Божьих коровок собрано:</span>
-                        <span id="endLadybugs" class="scoreValue">0</span>
+                        <span id="endLadybugs" class="score-value">0</span>
                     </div>
                     <div class="stats-item">
-                        <span>Мух увидели:</span>
-                        <span id="endFlies" class="scoreValue">0</span>
+                        <span>Жуков увидели:</span>
+                        <span id="endBeetles" class="score-value">0</span>
                     </div>
                 </div>
                 
@@ -733,9 +749,11 @@
             insectsCount: 0,
             stats: {
                 mosquitoes: 0,
+                cockroaches: 0,
+                flies: 0,
                 bees: 0,
                 ladybugs: 0,
-                flies: 0
+                beetles: 0
             },
             gameAreaSize: {
                 width: 0,
@@ -745,8 +763,8 @@
 
         // Локальное хранилище для статистики
         let gameStats = {
-            totalMosquitoes: 0,
-            bestMosquitoes: 0,
+            totalPoints: 0,
+            bestPoints: 0,
             bestTime: 0,
             totalGames: 0
         };
@@ -768,8 +786,8 @@
 
         // Обновление отображения статистики
         function updateStatsDisplay() {
-            document.getElementById('totalMosquitoes').textContent = gameStats.totalMosquitoes;
-            document.getElementById('bestMosquitoes').textContent = gameStats.bestMosquitoes;
+            document.getElementById('totalPoints').textContent = gameStats.totalPoints;
+            document.getElementById('bestPoints').textContent = gameStats.bestPoints;
             document.getElementById('bestTime').textContent = gameStats.bestTime + ' сек';
             document.getElementById('totalGames').textContent = gameStats.totalGames;
         }
@@ -822,7 +840,7 @@
                     
                     if (gameState.timerValue <= 0) {
                         gameState.timerValue = 0;
-                        endGame("Время вышло! Не успели убить комара.");
+                        endGame("Время вышло! Не успели убить комара, муху или таракана.");
                     }
                     
                     updateGameDisplay();
@@ -859,6 +877,11 @@
             insect.className = 'insect';
             insect.textContent = type;
             
+            // Случайный размер от базового до +25%
+            const sizeVariation = 0.8 + Math.random() * 0.25; // 0.8-1.05
+            const insectSize = 38 * sizeVariation; // Базовый размер 38px
+            insect.style.fontSize = `${insectSize}px`;
+            
             // Добавляем класс для комаров для анимации
             if (type === '🦟') {
                 insect.classList.add('mosquito');
@@ -869,7 +892,7 @@
             let startX, startY;
             
             // Определяем случайное смещение от края (в процентах от размера экрана)
-            const offset = Math.max(50, Math.min(areaWidth, areaHeight) * 0.05); // 5% от меньшей стороны, но не меньше 50px
+            const offset = Math.max(40, Math.min(areaWidth, areaHeight) * 0.04); // 4% от меньшей стороны, но не меньше 40px
             
             switch(startSide) {
                 case 0: // верх
@@ -916,15 +939,28 @@
                     break;
             }
             
-            // Для мух - увеличенная скорость
+            // Разная скорость для разных насекомых
             let speedModifier = 1;
             if (type === '🪰') {
-                speedModifier = 1.5; // Мухи на 50% быстрее
+                speedModifier = 1.6; // Мухи быстрее всех
+            } else if (type === '🪳') {
+                speedModifier = 0.8; // Тараканы медленнее
+            } else if (type === '🪲') {
+                speedModifier = 1.2; // Жуки немного быстрее
+            } else if (type === '🐝') {
+                speedModifier = 1.4; // Пчелы быстрые
+            } else if (type === '🐞') {
+                speedModifier = 0.7; // Божьи коровки медленные
             }
             
+            // Добавляем вариацию скорости в зависимости от размера
+            // Меньшие насекомые быстрее, большие - медленнее
+            const sizeSpeedFactor = 1 / sizeVariation; // Обратная зависимость
+            speedModifier *= sizeSpeedFactor;
+            
             // Время полета (зависит от уровня сложности и типа насекомого)
-            const baseSpeed = 4000 + Math.random() * 2000; // 4-6 секунд
-            const timeModifier = Math.max(1, gameState.time / 30); // каждые 30 секунд увеличиваем скорость
+            const baseSpeed = 3500 + Math.random() * 1500; // 3.5-5 секунд
+            const timeModifier = Math.max(1, gameState.time / 25); // каждые 25 секунд увеличиваем скорость
             const flightTime = (baseSpeed / timeModifier) / speedModifier;
             
             // Создаем анимацию с использованием requestAnimationFrame
@@ -976,9 +1012,11 @@
             // Обновление статистики
             switch(type) {
                 case '🦟': gameState.stats.mosquitoes++; break;
+                case '🪳': gameState.stats.cockroaches++; break;
+                case '🪰': gameState.stats.flies++; break;
                 case '🐝': gameState.stats.bees++; break;
                 case '🐞': gameState.stats.ladybugs++; break;
-                case '🪰': gameState.stats.flies++; break;
+                case '🪲': gameState.stats.beetles++; break;
             }
         }
 
@@ -1018,8 +1056,10 @@
             // Обработка в зависимости от типа насекомого
             switch(type) {
                 case '🦟': // Комары
+                case '🪳': // Тараканы
+                case '🪰': // Мухи
                     gameState.score++;
-                    resetTimer(); // Сбрасываем таймер при убийстве комара
+                    resetTimer(); // Сбрасываем таймер
                     updateGameDisplay();
                     break;
                     
@@ -1038,7 +1078,7 @@
                     }
                     break;
                     
-                case '🪰': // Мухи
+                case '🪲': // Жуки
                     // Ничего не делаем, просто отвлекающий элемент
                     break;
             }
@@ -1055,30 +1095,37 @@
             if (width < 100 || height < 100) return;
             
             // Определяем количество насекомых в зависимости от времени и размера экрана
-            const baseCount = 3;
-            const timeBonus = Math.floor(gameState.time / 30); // каждые 30 секунд +1 насекомое
+            const baseCount = 5; // Увеличено базовое количество
+            const timeBonus = Math.floor(gameState.time / 15); // каждые 15 секунд +1 насекомое
             
             // Учитываем размер экрана: на больших экранах можно больше насекомых
-            const screenFactor = Math.min(width * height / (400 * 800), 1.5); // Нормализуем к эталону 400x800
-            const maxInsects = Math.min(baseCount + timeBonus, Math.floor(8 * screenFactor)); // максимум зависит от размера экрана
+            const screenFactor = Math.min(width * height / (400 * 800), 2.2); // Увеличено до 2.2
+            const maxInsects = Math.min(baseCount + timeBonus, Math.floor(20 * screenFactor)); // увеличено максимум до 20
             
             // Если насекомых меньше максимального количества, добавляем новые
             if (gameState.insectsCount < maxInsects) {
                 // Вероятности появления разных насекомых
-                // Увеличиваем шанс появления комаров, чтобы игрок мог сбрасывать таймер
-                const insectTypes = ['🦟', '🦟', '🦟', '🦟', '🦟', '🦟', '🐝', '🐝', '🐞', '🪰', '🪰'];
+                // Больше полезных насекомых (дают очки) чтобы было легче сбрасывать таймер
+                const insectTypes = [
+                    '🦟', '🦟', '🦟', '🦟', '🦟', // Комары (5)
+                    '🪳', '🪳', '🪳', '🪳', // Тараканы (4)
+                    '🪰', '🪰', '🪰', '🪰', // Мухи (4)
+                    '🐝', '🐝', '🐝', // Пчелы (3)
+                    '🐞', '🐞', // Божьи коровки (2)
+                    '🪲', '🪲', '🪲' // Жуки (3)
+                ];
                 const randomType = insectTypes[Math.floor(Math.random() * insectTypes.length)];
                 createInsect(randomType);
             }
             
             // Планируем следующую генерацию с учетом времени и размера экрана
-            const baseInterval = 1200;
-            const timePenalty = Math.min(gameState.time * 8, 400); // увеличиваем частоту до определенного предела
+            const baseInterval = 800; // Уменьшено время между появлениями
+            const timePenalty = Math.min(gameState.time * 6, 300); // Увеличена частота появления
             
             // На маленьких экранах насекомые появляются реже
-            const screenSizePenalty = width < 300 ? 300 : 0;
+            const screenSizePenalty = width < 300 ? 200 : 0;
             
-            const nextGeneration = Math.max(baseInterval - timePenalty + screenSizePenalty, 600); // минимум 600мс
+            const nextGeneration = Math.max(baseInterval - timePenalty + screenSizePenalty, 400); // минимум 400мс
             
             setTimeout(generateInsects, nextGeneration);
         }
@@ -1103,7 +1150,14 @@
             gameState.gameActive = true;
             gameState.insects = [];
             gameState.insectsCount = 0;
-            gameState.stats = { mosquitoes: 0, bees: 0, ladybugs: 0, flies: 0 };
+            gameState.stats = { 
+                mosquitoes: 0, 
+                cockroaches: 0, 
+                flies: 0, 
+                bees: 0, 
+                ladybugs: 0, 
+                beetles: 0 
+            };
             
             // Очистка игровой области
             const gameArea = document.getElementById('gameArea');
@@ -1137,7 +1191,7 @@
             // Запуск генерации насекомых с небольшой задержкой
             setTimeout(() => {
                 generateInsects();
-            }, 300);
+            }, 200); // Уменьшена задержка
         }
 
         // Очистка всех насекомых
@@ -1164,10 +1218,10 @@
             
             // Обновление статистики
             gameStats.totalGames++;
-            gameStats.totalMosquitoes += gameState.score;
+            gameStats.totalPoints += gameState.score;
             
-            if (gameState.score > gameStats.bestMosquitoes) {
-                gameStats.bestMosquitoes = gameState.score;
+            if (gameState.score > gameStats.bestPoints) {
+                gameStats.bestPoints = gameState.score;
             }
             
             if (gameState.time > gameStats.bestTime) {
@@ -1181,9 +1235,11 @@
             document.getElementById('finalTime').textContent = gameState.time;
             document.getElementById('endReason').textContent = reason;
             document.getElementById('endMosquitoes').textContent = gameState.stats.mosquitoes;
+            document.getElementById('endCockroaches').textContent = gameState.stats.cockroaches;
+            document.getElementById('endFlies').textContent = gameState.stats.flies;
             document.getElementById('endBees').textContent = gameState.stats.bees;
             document.getElementById('endLadybugs').textContent = gameState.stats.ladybugs;
-            document.getElementById('endFlies').textContent = gameState.stats.flies;
+            document.getElementById('endBeetles').textContent = gameState.stats.beetles;
             
             // Показ экрана окончания игры
             document.getElementById('gameScreen').classList.add('hidden');
