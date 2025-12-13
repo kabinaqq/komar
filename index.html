@@ -13,6 +13,7 @@
             -webkit-touch-callout: none;
             -webkit-user-select: none;
             user-select: none;
+            -webkit-tap-highlight-color: transparent;
         }
         
         :root {
@@ -249,6 +250,8 @@
             font-size: 16px;
             transition: all 0.2s;
             color: var(--text-primary);
+            -webkit-tap-highlight-color: transparent;
+            outline: none;
         }
         
         .control-button:hover {
@@ -298,6 +301,14 @@
             will-change: transform;
             filter: drop-shadow(0 0 4px var(--shadow-color));
             transform-origin: center;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-user-drag: none;
+            user-drag: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            outline: none;
         }
         
         .insect:hover {
@@ -311,6 +322,9 @@
             animation: hitAnim 0.5s forwards;
             z-index: 3;
             transform: translate(-50%, -50%);
+            -webkit-tap-highlight-color: transparent;
+            -webkit-user-drag: none;
+            user-drag: none;
         }
         
         @keyframes hitAnim {
@@ -419,6 +433,8 @@
             transition: all 0.2s;
             box-shadow: 0 4px 10px color-mix(in srgb, var(--button-bg) 20%, transparent);
             min-width: 160px;
+            -webkit-tap-highlight-color: transparent;
+            outline: none;
         }
         
         .button:hover {
@@ -1368,12 +1384,31 @@
             
             requestAnimationFrame(animateInsect);
             
-            // Обработчик клика
-            insect.addEventListener('click', () => handleInsectClick(insect, type));
-            insect.addEventListener('touchstart', (e) => {
+            // Улучшенный обработчик клика
+            function handleInsectInteraction(e) {
                 e.preventDefault();
+                e.stopPropagation();
+                
+                // Предотвращаем множественные срабатывания
+                if (insect.getAttribute('data-clicked') === 'true') return;
+                insect.setAttribute('data-clicked', 'true');
+                
                 handleInsectClick(insect, type);
-            }, { passive: false });
+                
+                // Сбрасываем флаг через небольшое время
+                setTimeout(() => {
+                    insect.setAttribute('data-clicked', 'false');
+                }, 100);
+            }
+            
+            // Обработчик клика
+            insect.addEventListener('click', handleInsectInteraction);
+            insect.addEventListener('touchstart', handleInsectInteraction, { passive: false });
+            
+            // Дополнительные обработчики для предотвращения выделения
+            insect.addEventListener('mousedown', (e) => e.preventDefault());
+            insect.addEventListener('selectstart', (e) => e.preventDefault());
+            insect.addEventListener('dragstart', (e) => e.preventDefault());
             
             gameArea.appendChild(insect);
             gameState.insects.push(insect);
@@ -1702,6 +1737,23 @@
         document.addEventListener('contextmenu', function(e) {
             e.preventDefault();
             return false;
+        });
+        
+        // Дополнительные меры для предотвращения выделения
+        document.addEventListener('selectstart', function(e) {
+            if (e.target.classList.contains('insect') || 
+                e.target.classList.contains('button') || 
+                e.target.classList.contains('control-button')) {
+                e.preventDefault();
+                return false;
+            }
+        });
+        
+        document.addEventListener('dragstart', function(e) {
+            if (e.target.classList.contains('insect')) {
+                e.preventDefault();
+                return false;
+            }
         });
     </script>
 </body>
