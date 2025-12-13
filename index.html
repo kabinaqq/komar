@@ -38,6 +38,7 @@
             --inset-shadow: rgba(255, 255, 255, 0.05);
             --heart-color: #ff5252;
             --heart-empty: #555;
+            --game-area-radius: 20px;
         }
         
         /* Светлая тема */
@@ -77,6 +78,7 @@
             justify-content: center;
             align-items: center;
             transition: background 0.3s ease, color 0.3s ease;
+            padding: 15px;
         }
         
         .game-wrapper {
@@ -86,12 +88,19 @@
             max-height: 1200px;
             position: relative;
             overflow: hidden;
+            border-radius: var(--game-area-radius);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
         
         @media (max-width: 768px) {
             .game-wrapper {
                 max-width: 100%;
                 max-height: 100%;
+                border-radius: 0;
+            }
+            
+            body {
+                padding: 0;
             }
         }
         
@@ -101,6 +110,8 @@
             position: relative;
             display: flex;
             flex-direction: column;
+            border-radius: var(--game-area-radius);
+            overflow: hidden;
         }
         
         .header {
@@ -260,6 +271,7 @@
             background-color: var(--game-area-bg);
             width: 100%;
             height: 100%;
+            border-radius: 0 0 var(--game-area-radius) var(--game-area-radius);
         }
         
         .game-area-border {
@@ -271,41 +283,25 @@
             pointer-events: none;
             z-index: 1;
             box-shadow: inset 0 0 0 1px var(--inset-shadow);
+            border-radius: 0 0 var(--game-area-radius) var(--game-area-radius);
         }
         
         .insect {
             position: absolute;
             font-size: 38px;
             cursor: pointer;
-            transition: transform 0.1s;
+            transition: transform 0.2s ease;
             z-index: 2;
             text-shadow: 0 0 10px var(--shadow-color);
             pointer-events: auto;
             transform: translate(-50%, -50%);
             will-change: transform;
             filter: drop-shadow(0 0 4px var(--shadow-color));
+            transform-origin: center;
         }
         
         .insect:hover {
-            transform: translate(-50%, -50%) scale(1.12);
-        }
-        
-        .insect.mosquito {
-            animation: mosquitoFloat 2s infinite alternate ease-in-out;
-        }
-        
-        .insect.ladybug {
-            animation: ladybugFloat 3s infinite alternate ease-in-out;
-        }
-        
-        @keyframes mosquitoFloat {
-            0% { transform: translate(-50%, -50%) scale(1); }
-            100% { transform: translate(-50%, -50%) scale(1.04); }
-        }
-        
-        @keyframes ladybugFloat {
-            0% { transform: translate(-50%, -50%) scale(1); }
-            100% { transform: translate(-50%, -50%) scale(1.06); }
+            transform: translate(-50%, -50%) scale(1.15);
         }
         
         .hit-effect {
@@ -338,6 +334,7 @@
             text-align: center;
             overflow-y: auto;
             transition: background 0.3s ease;
+            border-radius: var(--game-area-radius);
         }
         
         .title {
@@ -1237,6 +1234,44 @@
             return { width, height };
         }
 
+        // Рассчитать угол поворота для насекомого
+        function calculateRotation(startX, startY, endX, endY, insectType) {
+            // Рассчитываем направление движения (вектор)
+            const dx = endX - startX;
+            const dy = endY - startY;
+            
+            // Рассчитываем угол движения в радианах
+            // Math.atan2(dy, dx) возвращает угол от оси X (вправо) до вектора
+            let angleRad = Math.atan2(dy, dx);
+            
+            // Конвертируем в градусы
+            let angleDeg = angleRad * (180 / Math.PI);
+            
+            // Корректируем угол в зависимости от исходной ориентации насекомого
+            switch(insectType) {
+                case '🦟': // По умолчанию смотрит влево
+                case '🐝': // По умолчанию смотрит влево
+                    // Если смотрит влево (0° направлен влево), нужно повернуть на 180°,
+                    // чтобы он смотрел вправо (стандартное направление)
+                    angleDeg += 180;
+                    break;
+                case '🪳': // По умолчанию смотрит вверх
+                case '🪰': // По умолчанию смотрит вверх
+                case '🐞': // По умолчанию смотрит вверх
+                case '🪲': // По умолчанию смотрит вверх
+                    // Если смотрит вверх (0° направлен вверх), нужно добавить 90°,
+                    // так как вектор направления рассчитывается от оси X (вправо)
+                    angleDeg += 90;
+                    break;
+            }
+            
+            // Нормализуем угол в диапазоне 0-360
+            while (angleDeg < 0) angleDeg += 360;
+            while (angleDeg >= 360) angleDeg -= 360;
+            
+            return angleDeg;
+        }
+
         // Создание насекомого
         function createInsect(type) {
             const gameArea = document.getElementById('gameArea');
@@ -1255,13 +1290,6 @@
             const sizeVariation = 0.8 + Math.random() * 0.25;
             const insectSize = 38 * sizeVariation;
             insect.style.fontSize = `${insectSize}px`;
-            
-            // Анимация
-            if (type === '🦟') {
-                insect.classList.add('mosquito');
-            } else if (type === '🐞') {
-                insect.classList.add('ladybug');
-            }
             
             // Начальная позиция
             const startSide = Math.floor(Math.random() * 4);
@@ -1289,6 +1317,12 @@
                 case 3: endX = areaWidth + offset; endY = Math.random() * areaHeight; break;
             }
             
+            // Рассчитываем угол поворота
+            const rotationAngle = calculateRotation(startX, startY, endX, endY, type);
+            
+            // Устанавливаем вращение через inline стиль
+            insect.style.transform = `translate(-50%, -50%) rotate(${rotationAngle}deg)`;
+            
             // Скорость
             let speedModifier = 1;
             if (type === '🪰') speedModifier = 1.6;
@@ -1305,7 +1339,7 @@
             const timeModifier = Math.max(1, gameState.time / 50);
             const flightTime = (baseSpeed / timeModifier) / speedModifier;
             
-            // Анимация
+            // Анимация движения
             const startTime = Date.now();
             
             function animateInsect() {
